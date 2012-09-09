@@ -101,6 +101,13 @@
 			\begin{verbatim}
 				iptables -A INPUT -p tcp -m state --state NEW -tcp-flags ALL ACK -j DROP
 			\end{verbatim}
+	\subsection{IP spoofing z~wewnątrz}
+		\subsubsection{Opis}
+			Metoda ataku polegająca na podszywaniu się pod innego użytkownika sieci poprzez zmianę adresu IP.
+		\subsubsection{Obrona}
+			Stworzenie bazy MAC \dywiz IP, a~następnie sprawdzanie za pomocą modułu IPSET obecności pary MAC\dywiz IP pakietu w~bazie zarejestrowanych stacji roboczych.
+		\subsubsection{Implementacja}
+			TODO
 	\subsection{IP spoofing z~zewnątrz}
 		\subsubsection{Opis}
 			Metoda polega na wysyłaniu z~sieci zewnętrznej pakietów ze zmienionym adresem źródłowym.
