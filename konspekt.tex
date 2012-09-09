@@ -1,0 +1,171 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\author{Marcin TORGiren Fabrykowski}
+\title{Wstępna specyfikacja systemu IPS}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Opis problemu}
+	\subsection{Co to jest IPS}
+		System IPS (Intrusion Prevention System) jest to system wykrywania i blokowanie ataków sieciowych.
+		Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań.
+	\subsection{Schemat działania}
+		\begin{enumerate}
+		\item Analiza ruchu sieciowego
+		\item Wykrycie zachowań pasujących do reguł bezpieczeństwa
+		\item Reakcja na niebezpieczne zachowanie
+		\item Poinformowanie administratora o próbie ataku
+		\item Zapisanie podjętych działań w bazie danych
+		\end{enumerate}
+\section{Analiza ruchu sieciowego}
+	\subsection{Używane narzędzie}
+		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
+	\subsection{Jak działa iptables}
+		TODO
+\section{Wykrywanie zagrożeń}
+	\subsection{Ataki typu SSH BruteForce}
+		\subsubsection{Opis}
+			Atak ten polega na ciągłej próbie połączenia się z usługą SSH z różnymi hasłami.
+		\subsubsection{Obrona}
+			Zastosuję ograniczenie liczby połączeń z usługą SSH w ciągu minuty do 4.\\
+			Dodatkowo przy liczbie połączeń przekraczającej 10 na godzinę zostanie wygenerowane ostrzeżenie.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Ataki typu SYN Flood}
+		\subsubsection{Opis}
+			Atak ten jest jednym z~ataków DoS i~polega na wysyłaniu ciągłej dużej ilości pakietów SYN do atakowanego hosta.
+
+			W~normalnym przypadku, klient wysyła pakiet SYN do serwera deklarując chęć nawiązania połączenia. Serwer odpowiada pakietem SYN\dywiz ACK potwierdzając gotowość do nawiązania połączenia, po czym klient wysyła pakiet ACK, co jest równoznaczne z~ustanowieniem połączenia.
+
+			W~przypadku ataku SYN Flood, atakujący wysyła dużą ilość pakietów SYN. Serwer odpowiada na każde takie żądanie połączenia pakietami SYN\dywiz ACK. Jednakże atakujący nie wysyła pakietów ACK. Serwer w~oczekiwaniu na odpowiedzi, przechowuje informacje o~nawiązywanych połączeniach w~tablicy stanów połączeń. Przed usunięciem wpisu z~tej tablicy z~powodu braku odpowiedzi ACK od klienta, serwer musi odczekać czas ustalony przez TIMEOUT.
+
+			Jeżeli pakietów SYN było odpowiednio dużo, mogą one zapełnić całą tablicę połączeń serwera. Spowoduje to, że w~przypadku próby nawiązania połączenia przez normalnego użytkownika, jego żądanie zostanie odrzucone z~powodu przepełnionej tablicy stanów. W~efekcie, serwer przestanie odpowiadać na żądania użytkowników.
+		\subsubsection{Obrona}
+			Aby zabezpieczyć się przed atakami SYN Flood możemy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Ataki typu ICMP Flood}
+		\subsubsection{Opis}
+			Kolejny atak DoS. Wykorzystywany, gdy atakujący ma większe łącze niż ofiara. Polega na wysyłaniu znacznej liczby pakietów ICMP Request. Serwer odpowiadając na każde zapytanie szybko **nasyca** swoje łącze, powodując iż staje się niedostępny dla zwykłych klientów.
+		\subsubsection{Obrona}
+			Obroną na atak ICMP Flood jest limitowanie akceptowanych pakietów ICMP Request w~ciągu sekundy.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Atak niepoprawnymi pakietami}
+		\subsubsection{Opis}
+			Otrzymanie niepoprawnego pakietu, np: zawierającego jednocześnie flagi SYN i~FIN, może spowodować nieprzewidywalne zachowanie w~niektórych implementacjach obsługi sieci.
+		\subsubsection{Obrona}
+			Ignorowanie wszystkich niepoprawnych pakietów
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Zbieranie informacji poprzez ICMP Address Mask Request}
+		\subsubsection{Opis}
+			ICMP type 17. Pozwala atakującemu na poznanie ustawień sieci. Informacje takie pozwalają na ataki **broadcastowe** oraz ułatwiają **wpięcie** się do sieci.\\
+		\subsubsection{Obrona}
+			Większość dzisiejszych systemów nie odpowiada na zapytania o~maskę sieci, jednak **dla pewności** lepiej zabezpieczyć się przed takim atakiem. Pozwoli to nam również wysłać ostrzeżenie do administratora, że ktoś interesuje się serwerem
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Zbieranie informacji poprzez ICMP Timestamp Request}
+		\subsubsection{Opis}
+			ICMP type 13. Pozwala atakującemu na poznanie dokładnego czasu na serwerze. Może to prowadzić do ataków opartych na liczbach pseudolosowych bazujących na czasie serwera.
+		\subsubsection{Obrona}
+			Ignorowanie żądań typu 13, oraz informacja do administratora.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Skanowanie portów metodą SYN}
+		\subsubsection{Opis}
+			Skanowanie to polega na wysyłaniu pakietów SYN do skanowanego hosta. Jeżeli port jest otwarty, serwer odpowiada, zgodnie ze standardem, pakietem SYN ACK, na to skaner odpowiada pakietem RST.\\
+			Natomiast, jeżeli port jest zamknięty, skanowany host odpowiada pakietem RST ACK.\\
+			W~przypadku kiedy port jest filtrowany na firewallu, skanowany host nie odsyła żadnej odpowiedzi.\\
+			Daje to pełen przegląd stanu portów, co może być bardzo niebezpieczne.
+		\subsubsection{Obrona}
+			Limitowanie ilości akceptowanych pakietów SYN w~jednostce czasu. W~przypadku wykrycia skanowania, przekazanie informacji do administratora.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Skanowanie portów funkcjami systemowymi}
+		\subsubsection{Opis}
+			Skanowanie to jest bardzo podobne do poprzedniego, jednak wykorzystuje funkcje systemowe zamiast niskopoziomowych gniazd surowych. W~tym przypadku następuje pełne nawiązanie połączenia TCP.
+
+			Rozpoznanie stanu portu jest takie samo jak w~skanowaniu pakietami SYN:\\
+			Jeśli udało się nawiązać połączenie, to znaczy, że port jest otwarty, jeżeli otrzymaliśmy RST ACK, to znaczy że port jest zamknięty, a~jeżeli brak odpowiedzi, znaczy to że port jest filtrowany
+		\subsubsection{Obrona}
+			Metoda identyczna jak w~pakietach SYN, gdyż użycie metod systemowych jest jedynie wydłużoną wersją użycia gniazd surowych i~pakietów SYN
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Skanowanie pakietami ACK}
+		\subsubsection{Opis}
+			Polega na wysyłaniu pakietów ACK na poszczególne porty. W~przypadku gdy port jest filtrowany, nie zostaje wysłana żadna odpowiedź, natomiast jeżeli port jest **otwarty na firewallu** dostaniemy odpowiedź w~postaci pakietu RST niezależnie czy port jest otwarty czy zamknięty.
+		\subsubsection{Obrona}
+			Filtrowanie pakietów ACK mających równocześnie **state NEW**
+		\subsubsection{Implementacja}
+			\begin{verbatim}
+				iptables -A INPUT -p tcp -m state --state NEW -tcp-flags ALL ACK -j DROP
+			\end{verbatim}
+	\subsection{IP spoofing z~wewnątrz}
+		\subsubsection{Opis}
+			Metoda ataku polegająca na podszywaniu się pod innego użytkownika sieci poprzez zmianę adresu IP.
+		\subsubsection{Obrona}
+			Stworzenie bazy MAC \dywiz IP, a~następnie sprawdzanie za pomocą modułu IPSET obecności pary MAC\dywiz IP pakietu w~bazie zarejestrowanych stacji roboczych.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{IP spoofing z~zewnątrz}
+		\subsubsection{Opis}
+			Metoda polega na wysyłaniu z~sieci zewnętrznej pakietów ze zmienionym adresem źródłowym.
+		\subsubsection{Obrona}
+			Blokowanie pakietów pochodzących *z zewnątrz* z~adresami źródłowymi należącymi do adresów prywatnych
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Wirusy}
+		\subsubsection{Opis}
+			Jednym z~objawów obecności wirusów w~naszej sieci jest duża ilość wysyłanych wiadomości z~zainfekowanych komputerów. Nie jest to bezpośredni atak na nasz serwer, ale obecność wirusów w~sieci może doprowadzić w~przyszłości do ataków.
+		\subsubsection{Obrona}
+			Po wykryciu dużej liczby wysłanych maili w~krótkim czasie, zainfekowany komputer zostanie odcięty od sieci.\\
+			\textit{Należy tutaj uważać na sytuację w~której użytkownik rzeczywiście wysyła dużą ilość maili - np: wysyłanie CV}
+		\subsubsection{Implementacja}
+			TODO
+\section{Analiza}
+	\subsection{Logowanie z~iptables}
+		Zapis logowania z~iptables do pliku będzie realizowany przy odpowiedniej konfiguracji programu \textbf{syslog-ng}.
+		\subsubsection{Konfiguracja syslog-ng}
+			TODO
+	\subsection{Analiza logów}
+		Analiza będzie przeprowadzana w~minutowych odstępach. Skrypt będzie analizował wycinek logów z~poprzedniej minuty w~poszukiwaniu oznak ataku.
+		
+		W~przypadku wykrycia ataku zostanie wysłana wiadomość do administratora o~wykrytym ataku oraz dodanie do bazy danych informacji o~zajściu.
+\section{Raportowanie}
+	\subsection{Na automatycznie}
+		\subsubsection{Alerty}
+			Wysyłane drogą mailową informacje o~wystąpieniu próby ataku. Najpóźniej minutę po wystąpieniu zajścia. Analiza logów IPSa co minutę za pomocą CRON\dywiz a.
+		\subsubsection{Raport dzienny}
+			Wysyłany drogą mailową raport sporządzany raz dziennie również za pomocą CRON\dywiz a. Zawierać będzie informacje o~przeprowadzonych atakach, *podejrzanych* zachowaniach oraz podjętych krokach.
+	\subsection{Na żądanie}
+		Za pośrednictwem protokołu HTTP, dostępny będzie interface pozwalający na przeglądanie raportów z~konkretnych dni oraz przeglądanie dokładnych logów na których podstawie zostały rozpoznane próby ataków.
+		
+		System zarządzania raportami zostanie stworzony w~Pythonie, przy użyciu frameworku Django.
+\section{Zapis do bazy danych}
+	\subsection{Baza danych}
+		Jako bazy danych będę używał bazy PostreSQL.\\
+		Po wstępnym zapoznaniu się z~danymi dostępnymi w~internecie, uznałem że PostreSQL jest wydajniejszy przy bazach z~dużą ilością rekordów oraz porównywalny z~MySQL przy mniejszych bazach.
+	\subsection{Struktura logów}
+		Dane jakie będą zapisywane:
+		\begin{itemize}
+			\item Data i~godzina
+			\item Nazwa serwera na którym wystąpiła akcja
+			\item Typ zagrożenia
+			\item Podjęte działania
+			\item Wyciąg z~logów pokazujący pakiet powodujący uruchomienie alarmu
+		\end{itemize}
+		Typy zagrożeń będą definiowały poziom niebezpieczeństwa, potrzebę wysyłania wiadomości mailowej\\
+		W~bazie będą również zapisane dane klientów w~naszej podsieci.	
+	\subsection{Zapisywanie do bazy}
+		Zapisywanie będzie dokonywane przez skrypty analizujące logi co minutę przy użyciu CRONa. 
+\section{Zarządzanie systemem}
+	Planowany jest również prosty interface webowy do zarządzania systemem. Pozwalać on będzie włączać i~wyłączać poszczególne moduły, dodawać nowych klientów do bazy danych - pary MAC\dywiz IP, konfigurować limity dla częstotliwości połączeń.
+	
+	System będzie również napisany w~Pythonie i~Django.
+\end{document}
+
