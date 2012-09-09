@@ -1,0 +1,34 @@
+\documentclass[a4paper]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\author{Marcin TORGiren Fabrykowski}
+\title{Wstępna specyfikacja systemu IPS}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Opis problemu}
+\subsection{Co to jest IPS}
+System IPS (Intrusion Prevention System) jest to system wykrywania i blokowanie ataków sieciowych.
+Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań
+\subsection{Schemat działania}
+\begin{enumerate}
+\item Analiza ruchu sieciowego
+\item Wykrycie zachowań pasujących do reguł bezpieczeństwa
+\item Reakcja na niebezpieczne zachowanie
+\item Poinformowanie administratora o próbie ataku
+\item Zapisanie podjętych działań w bazie danych
+\end{enumerate}
+\section{Analiza ruchu sieciowego}
+Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
+\section{Wykrywanie zagrożeń}
+\subsection{Ataki typu SSH BruteForce}
+\subsubsection{Opis}
+Atak ten polega na ciągłej próbie połączenia się z usługą SSH z różnymi hasłami.
+\subsubsection{Obrona}
+Zastosuję ograniczenie liczby połączeń z usługą SSH w ciągu minuty do 4.\\
+Dodatkowo przy liczbie połączeń przekraczającej 10 na godzinę zostanie wygenerowane ostrzeżenie.
+\subsubsection{Implementacja}
+\end{document}
+
