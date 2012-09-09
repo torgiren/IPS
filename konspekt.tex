@@ -58,12 +58,19 @@
 			Większość dzisiejszych systemów nie odpowiada na zapytania o~maskę sieci, jednak **dla pewności** lepiej zabezpieczyć się przed takim atakiem. Pozwoli to nam również wysłać ostrzeżenie do administratora, że ktoś interesuje się serwerem
 		\subsubsection{Implementacja}
 			TODO
-	\subsection{Zbieranie informacji poprzez ICMP Timestamp request}
+	\subsection{Zbieranie informacji poprzez ICMP Timestamp Request}
 		\subsubsection{Opis}
 			ICMP type 13. Pozwala atakującemu na poznanie dokładnego czasu na serwerze. Może to prowadzić do ataków opartych na liczbach pseudolosowych bazujących na czasie serwera.
 		\subsubsection{Obrona}
 			Ignorowanie żądań typu 13, oraz informacja do administratora.
-		\subsubsection{Imlementacja}
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Atak niepoprawnymi pakietami}
+		\subsubsection{Opis}
+			Otrzymanie niepoprawnego pakietu, np: zawierającego jednocześnie flagi SYN i~FIN, może spowodować nieprzewidywalne zachowanie w~niektórych implementacjach obsługi sieci.
+		\subsubsection{Obrona}
+			Ignorowanie wszystkich niepoprawnych pakietów
+		\subsubsection{Implementacja}
 			TODO
 \end{document}
 
