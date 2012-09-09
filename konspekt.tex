@@ -44,5 +44,19 @@
 			Aby zabezpieczyć się przed atakami SYN Flood możemy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.
 		\subsubsection{Implementacja}
 			TODO
+	\subsection{Ataki typu ICMP Flood}
+		\subsubsection{Opis}
+			Kolejny atak DoS. Wykorzystywany, gdy atakujący ma większe łącze niż ofiara. Polega na wysyłaniu znacznej liczby pakietów ICMP Request. Serwer odpowiadając na każde zapytanie szybko **nasyca** swoje łącze, powodując iż staje się niedostępny dla zwykłych klientów.
+		\subsubsection{Obrona}
+			Obroną na atak ICMP Flood jest limitowanie akceptowanych pakietów ICMP Request w~ciągu sekundy.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Zbieranie informacji poprzez ICMP Address Mask Request}
+		\subsubsection{Opis}
+			ICMP type 17. Pozwala atakującemu na poznanie ustawień sieci. Informacje takie pozwalają na ataki **broadcastowe** oraz ułatwiają **wpięcie** się do sieci.\\
+		\subsubsection{Obrona}
+			Większość dzisiejszych systemów nie odpowiada na zapytania o~maskę sieci, jednak **dla pewności** lepiej zabezpieczyć się przed takim atakiem. Pozwoli to nam również wysłać ostrzeżenie do administratora, że ktoś interesuje się serwerem
+		\subsubsection{Implementacja}
+			TODO
 \end{document}
 
