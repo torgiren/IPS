@@ -119,6 +119,23 @@
 			Blokowanie pakietów pochodzących *z zewnątrz* z~adresami źródłowymi należącymi do adresów prywatnych
 		\subsubsection{Implementacja}
 			TODO
+	\subsection{Wirusy}
+		\subsubsection{Opis}
+			Jednym z~objawów obecności wirusów w~naszej sieci jest duża ilość wysyłanych wiadomości z~zainfekowanych komputerów. Nie jest to bezpośredni atak na nasz serwer, ale obecność wirusów w~sieci może doprowadzić w~przyszłości do ataków.
+		\subsubsection{Obrona}
+			Po wykryciu dużej liczby wysłanych maili w~krótkim czasie, zainfekowany komputer zostanie odcięty od sieci.\\
+			\textit{Należy tutaj uważać na sytuację w~której użytkownik rzeczywiście wysyła dużą ilość maili - np: wysyłanie CV}
+		\subsubsection{Implementacja}
+			TODO
+\section{Analiza}
+	\subsection{Logowanie z~iptables}
+		Zapis logowania z~iptables do pliku będzie realizowany przy odpowiedniej konfiguracji programu \textbf{syslog-ng}.
+		\subsubsection{Konfiguracja syslog-ng}
+			TODO
+	\subsection{Analiza logów}
+		Analiza będzie przeprowadzana w~minutowych odstępach. Skrypt będzie analizował wycinek logów z~poprzedniej minuty w~poszukiwaniu oznak ataku.
+		
+		W~przypadku wykrycia ataku zostanie wysłana wiadomość do administratora o~wykrytym ataku oraz dodanie do bazy danych informacji o~zajściu.
 \section{Raportowanie}
 	\subsection{Na automatycznie}
 		\subsubsection{Alerty}
@@ -142,7 +159,13 @@
 			\item Podjęte działania
 			\item Wyciąg z~logów pokazujący pakiet powodujący uruchomienie alarmu
 		\end{itemize}
+		Typy zagrożeń będą definiowały poziom niebezpieczeństwa, potrzebę wysyłania wiadomości mailowej\\
+		W~bazie będą również zapisane dane klientów w~naszej podsieci.	
 	\subsection{Zapisywanie do bazy}
 		Zapisywanie będzie dokonywane przez skrypty analizujące logi co minutę przy użyciu CRONa. 
+\section{Zarządzanie systemem}
+	Planowany jest również prosty interface webowy do zarządzania systemem. Pozwalać on będzie włączać i~wyłączać poszczególne moduły, dodawać nowych klientów do bazy danych - pary MAC-IP.
+	
+	System będzie również napisany w~Pythonie i~Django.
 \end{document}
 
