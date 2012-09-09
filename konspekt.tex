@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,10pt]{article}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
 \author{Marcin TORGiren Fabrykowski}
@@ -9,26 +9,40 @@
 \tableofcontents
 \newpage
 \section{Opis problemu}
-\subsection{Co to jest IPS}
-System IPS (Intrusion Prevention System) jest to system wykrywania i blokowanie ataków sieciowych.
-Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań
-\subsection{Schemat działania}
-\begin{enumerate}
-\item Analiza ruchu sieciowego
-\item Wykrycie zachowań pasujących do reguł bezpieczeństwa
-\item Reakcja na niebezpieczne zachowanie
-\item Poinformowanie administratora o próbie ataku
-\item Zapisanie podjętych działań w bazie danych
-\end{enumerate}
+	\subsection{Co to jest IPS}
+		System IPS (Intrusion Prevention System) jest to system wykrywania i blokowanie ataków sieciowych.
+		Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań
+	\subsection{Schemat działania}
+		\begin{enumerate}
+		\item Analiza ruchu sieciowego
+		\item Wykrycie zachowań pasujących do reguł bezpieczeństwa
+		\item Reakcja na niebezpieczne zachowanie
+		\item Poinformowanie administratora o próbie ataku
+		\item Zapisanie podjętych działań w bazie danych
+		\end{enumerate}
 \section{Analiza ruchu sieciowego}
-Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
+	\subsection{Używane narzędzie}
+		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
+	\subsection{Jak działa iptables}
+		TODO
 \section{Wykrywanie zagrożeń}
-\subsection{Ataki typu SSH BruteForce}
-\subsubsection{Opis}
-Atak ten polega na ciągłej próbie połączenia się z usługą SSH z różnymi hasłami.
-\subsubsection{Obrona}
-Zastosuję ograniczenie liczby połączeń z usługą SSH w ciągu minuty do 4.\\
-Dodatkowo przy liczbie połączeń przekraczającej 10 na godzinę zostanie wygenerowane ostrzeżenie.
-\subsubsection{Implementacja}
+	\subsection{Ataki typu SSH BruteForce}
+		\subsubsection{Opis}
+			Atak ten polega na ciągłej próbie połączenia się z usługą SSH z różnymi hasłami.
+		\subsubsection{Obrona}
+			Zastosuję ograniczenie liczby połączeń z usługą SSH w ciągu minuty do 4.\\
+			Dodatkowo przy liczbie połączeń przekraczającej 10 na godzinę zostanie wygenerowane ostrzeżenie.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Ataki typu SYN Flood}
+		\subsubsection{Opis}
+			Atak ten jest jednym z~ataków DoS i~polega na wysyłaniu ciągłej dużej ilości pakietów SYN do atakowanego hosta.\\
+			W~normalnym przypadku, klient wysyła pakiet SYN do serwera deklarując chęć nawiązania połączenia. Serwer odpowiada pakietem SYN\dywiz ACK potwierdzając gotowość do nawiązania połączenia, po czym klient wysyła pakiet ACK, co jest równoznaczne z~ustanowieniem połączenia.\\
+			W~przypadku ataku SYN Flood, atakujący wysyła dużą ilość pakietów SYN. Serwer odpowiada na każde takie żądanie połączenia pakietami SYN\dywiz ACK. Jednakże atakujący nie wysyła pakietów ACK. Serwer w~oczekiwaniu na odpowiedzi, przechowuje informacje o~nawiązywanych połączeniach w~tablicy stanów połączeń. Przed usunięciem wpisu z~tej tablicy z~powodu braku odpowiedzi ACK od klienta, serwer musi odczekać czas ustalony przez TIMEOUT.\\
+			Jeżeli pakietów SYN było odpowiednio dużo, mogą one zapełnić całą tablicę połączeń serwera. Spowoduje to, że w~przypadku próby nawiązania połączenia przez normalnego użytkownika, jego żądanie zostanie odrzucone z~powodu przepełnionej tablicy stanów. W~efekcie, serwer przestanie odpowiadać na żądania użytkowników.
+		\subsubsection{Obrona}
+			Aby zabezpieczyć się przed atakami SYN Flood możemy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.
+		\subsubsection{Implementacja}
+			TODO
 \end{document}
 
