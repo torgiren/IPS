@@ -101,5 +101,15 @@
 			\begin{verbatim}
 				iptables -A INPUT -p tcp -m state --state NEW -tcp-flags ALL ACK -j DROP
 			\end{verbatim}
+	\subsection{IP spoofing z~zewnątrz}
+		\subsubsection{Opis}
+			Metoda polega na wysyłaniu z~sieci zewnętrznej pakietów ze zmienionym adresem źródłowym.
+		\subsubsection{Obrona}
+			Blokowanie pakietów pochodzących *z zewnątrz* z~adresami źródłowymi należącymi do adresów prywatnych
+		\subsubsection{Implementacja}
+			TODO
+\section{Raportowanie}
+	\subsection{Na żywo}
+	\subsection{Na żądanie}
 \end{document}
 
