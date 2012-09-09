@@ -11,7 +11,7 @@
 \section{Opis problemu}
 	\subsection{Co to jest IPS}
 		System IPS (Intrusion Prevention System) jest to system wykrywania i blokowanie ataków sieciowych.
-		Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań
+		Jego zadaniem jest analiza ruchu sieciowego wchodzącego do serwera oraz przechodzącego przez niego, oraz odpowiednie reagowanie w przypadku wykrycia **podejrzanych** zachowań.
 	\subsection{Schemat działania}
 		\begin{enumerate}
 		\item Analiza ruchu sieciowego
@@ -51,6 +51,13 @@
 			Obroną na atak ICMP Flood jest limitowanie akceptowanych pakietów ICMP Request w~ciągu sekundy.
 		\subsubsection{Implementacja}
 			TODO
+	\subsection{Atak niepoprawnymi pakietami}
+		\subsubsection{Opis}
+			Otrzymanie niepoprawnego pakietu, np: zawierającego jednocześnie flagi SYN i~FIN, może spowodować nieprzewidywalne zachowanie w~niektórych implementacjach obsługi sieci.
+		\subsubsection{Obrona}
+			Ignorowanie wszystkich niepoprawnych pakietów
+		\subsubsection{Implementacja}
+			TODO
 	\subsection{Zbieranie informacji poprzez ICMP Address Mask Request}
 		\subsubsection{Opis}
 			ICMP type 17. Pozwala atakującemu na poznanie ustawień sieci. Informacje takie pozwalają na ataki **broadcastowe** oraz ułatwiają **wpięcie** się do sieci.\\
@@ -65,11 +72,23 @@
 			Ignorowanie żądań typu 13, oraz informacja do administratora.
 		\subsubsection{Implementacja}
 			TODO
-	\subsection{Atak niepoprawnymi pakietami}
+	\subsection{Skanowanie portów metodą SYN}
 		\subsubsection{Opis}
-			Otrzymanie niepoprawnego pakietu, np: zawierającego jednocześnie flagi SYN i~FIN, może spowodować nieprzewidywalne zachowanie w~niektórych implementacjach obsługi sieci.
+			Skanowanie to polega na wysyłaniu pakietów SYN do skanowanego hosta. Jeżeli port jest otwarty, serwer odpowiada, zgodnie ze standardem, pakietem SYN ACK, na to skaner odpowiada pakietem RST.\\
+			Natomiast, jeżeli port jest zamknięty, skanowany host odpowiada pakietem RST ACK.\\
+			W~przypadku kiedy port jest filtrowany na firewallu, skanowany host nie odsyła żadnej odpowiedzi.\\
+			Daje to pełen przegląd stanu portów, co może być bardzo niebezpieczne.
 		\subsubsection{Obrona}
-			Ignorowanie wszystkich niepoprawnych pakietów
+			Limitowanie ilości akceptowanych pakietów SYN w~jednostce czasu. W~przypadku wykrycia skanowania, przekazanie informacji do administratora.
+		\subsubsection{Implementacja}
+			TODO
+	\subsection{Skanowanie portów funkcjami systemowymi}
+		\subsubsection{Opis}
+			Skanowanie to jest bardzo podobne do poprzedniego, jednak wykorzystuje funkcje systemowe zamiast niskopoziomowych gniazd surowych. W~tym przypadku następuje pełne nawiązanie połączenia TCP.\\
+			Rozpoznanie stanu portu jest takie samo jak w~skanowaniu pakietami SYN:\\
+			Jeśli udało się nawiązać połączenie, to znaczy, że port jest otwarty, jeżeli otrzymaliśmy RST ACK, to znaczy że port jest zamknięty, a~jeżeli brak odpowiedzi, znaczy to że port jest filtrowany
+		\subsubsection{Obrona}
+			Metoda identyczna jak w~pakietach SYN, gdyż użycie metod systemowych jest jedynie wydłużoną wersją użycia gniazd surowych i~pakietów SYN
 		\subsubsection{Implementacja}
 			TODO
 \end{document}
