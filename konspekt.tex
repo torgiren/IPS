@@ -37,9 +37,12 @@
 			TODO
 	\subsection{Ataki typu SYN Flood}
 		\subsubsection{Opis}
-			Atak ten jest jednym z~ataków DoS i~polega na wysyłaniu ciągłej dużej ilości pakietów SYN do atakowanego hosta.\\
-			W~normalnym przypadku, klient wysyła pakiet SYN do serwera deklarując chęć nawiązania połączenia. Serwer odpowiada pakietem SYN\dywiz ACK potwierdzając gotowość do nawiązania połączenia, po czym klient wysyła pakiet ACK, co jest równoznaczne z~ustanowieniem połączenia.\\
-			W~przypadku ataku SYN Flood, atakujący wysyła dużą ilość pakietów SYN. Serwer odpowiada na każde takie żądanie połączenia pakietami SYN\dywiz ACK. Jednakże atakujący nie wysyła pakietów ACK. Serwer w~oczekiwaniu na odpowiedzi, przechowuje informacje o~nawiązywanych połączeniach w~tablicy stanów połączeń. Przed usunięciem wpisu z~tej tablicy z~powodu braku odpowiedzi ACK od klienta, serwer musi odczekać czas ustalony przez TIMEOUT.\\
+			Atak ten jest jednym z~ataków DoS i~polega na wysyłaniu ciągłej dużej ilości pakietów SYN do atakowanego hosta.
+
+			W~normalnym przypadku, klient wysyła pakiet SYN do serwera deklarując chęć nawiązania połączenia. Serwer odpowiada pakietem SYN\dywiz ACK potwierdzając gotowość do nawiązania połączenia, po czym klient wysyła pakiet ACK, co jest równoznaczne z~ustanowieniem połączenia.
+
+			W~przypadku ataku SYN Flood, atakujący wysyła dużą ilość pakietów SYN. Serwer odpowiada na każde takie żądanie połączenia pakietami SYN\dywiz ACK. Jednakże atakujący nie wysyła pakietów ACK. Serwer w~oczekiwaniu na odpowiedzi, przechowuje informacje o~nawiązywanych połączeniach w~tablicy stanów połączeń. Przed usunięciem wpisu z~tej tablicy z~powodu braku odpowiedzi ACK od klienta, serwer musi odczekać czas ustalony przez TIMEOUT.
+
 			Jeżeli pakietów SYN było odpowiednio dużo, mogą one zapełnić całą tablicę połączeń serwera. Spowoduje to, że w~przypadku próby nawiązania połączenia przez normalnego użytkownika, jego żądanie zostanie odrzucone z~powodu przepełnionej tablicy stanów. W~efekcie, serwer przestanie odpowiadać na żądania użytkowników.
 		\subsubsection{Obrona}
 			Aby zabezpieczyć się przed atakami SYN Flood możemy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.
@@ -85,7 +88,8 @@
 			TODO
 	\subsection{Skanowanie portów funkcjami systemowymi}
 		\subsubsection{Opis}
-			Skanowanie to jest bardzo podobne do poprzedniego, jednak wykorzystuje funkcje systemowe zamiast niskopoziomowych gniazd surowych. W~tym przypadku następuje pełne nawiązanie połączenia TCP.\\
+			Skanowanie to jest bardzo podobne do poprzedniego, jednak wykorzystuje funkcje systemowe zamiast niskopoziomowych gniazd surowych. W~tym przypadku następuje pełne nawiązanie połączenia TCP.
+
 			Rozpoznanie stanu portu jest takie samo jak w~skanowaniu pakietami SYN:\\
 			Jeśli udało się nawiązać połączenie, to znaczy, że port jest otwarty, jeżeli otrzymaliśmy RST ACK, to znaczy że port jest zamknięty, a~jeżeli brak odpowiedzi, znaczy to że port jest filtrowany
 		\subsubsection{Obrona}
@@ -116,7 +120,29 @@
 		\subsubsection{Implementacja}
 			TODO
 \section{Raportowanie}
-	\subsection{Na żywo}
+	\subsection{Na automatycznie}
+		\subsubsection{Alerty}
+			Wysyłane drogą mailową informacje o~wystąpieniu próby ataku. Najpóźniej minutę po wystąpieniu zajścia. Analiza logów IPSa co minutę za pomocą CRON\dywiz a.
+		\subsubsection{Raport dzienny}
+			Wysyłany drogą mailową raport sporządzany raz dziennie również za pomocą CRON\dywiz a. Zawierać będzie informacje o~przeprowadzonych atakach, *podejrzanych* zachowaniach oraz podjętych krokach.
 	\subsection{Na żądanie}
+		Za pośrednictwem protokołu HTTP, dostępny będzie interface pozwalający na przeglądanie raportów z~konkretnych dni oraz przeglądanie dokładnych logów na których podstawie zostały rozpoznane próby ataków.
+		
+		System zarządzania raportami zostanie stworzony w~Pythonie, przy użyciu frameworku Django.
+\section{Zapis do bazy danych}
+	\subsection{Baza danych}
+		Jako bazy danych będę używał bazy PostreSQL.\\
+		Po wstępnym zapoznaniu się z~danymi dostępnymi w~internecie, uznałem że PostreSQL jest wydajniejszy przy bazach z~dużą ilością rekordów oraz porównywalny z~MySQL przy mniejszych bazach.
+	\subsection{Struktura logów}
+		Dane jakie będą zapisywane:
+		\begin{itemize}
+			\item Data i~godzina
+			\item Nazwa serwera na którym wystąpiła akcja
+			\item Typ zagrożenia
+			\item Podjęte działania
+			\item Wyciąg z~logów pokazujący pakiet powodujący uruchomienie alarmu
+		\end{itemize}
+	\subsection{Zapisywanie do bazy}
+		Zapisywanie będzie dokonywane przez skrypty analizujące logi co minutę przy użyciu CRONa. 
 \end{document}
 
