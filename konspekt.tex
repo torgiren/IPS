@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage{verbatim}
 \author{Marcin TORGiren Fabrykowski}
 \title{Wstępna specyfikacja systemu IPS}
 \begin{document}
@@ -91,5 +92,14 @@
 			Metoda identyczna jak w~pakietach SYN, gdyż użycie metod systemowych jest jedynie wydłużoną wersją użycia gniazd surowych i~pakietów SYN
 		\subsubsection{Implementacja}
 			TODO
+	\subsection{Skanowanie pakietami ACK}
+		\subsubsection{Opis}
+			Polega na wysyłaniu pakietów ACK na poszczególne porty. W~przypadku gdy port jest filtrowany, nie zostaje wysłana żadna odpowiedź, natomiast jeżeli port jest **otwarty na firewallu** dostaniemy odpowiedź w~postaci pakietu RST niezależnie czy port jest otwarty czy zamknięty.
+		\subsubsection{Obrona}
+			Filtrowanie pakietów ACK mających równocześnie **state NEW**
+		\subsubsection{Implementacja}
+			\begin{verbatim}
+				iptables -A INPUT -p tcp -m state --state NEW -tcp-flags ALL ACK -j DROP
+			\end{verbatim}
 \end{document}
 
