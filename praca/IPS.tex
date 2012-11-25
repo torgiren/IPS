@@ -1,0 +1,69 @@
+\documentclass[a4paper,10pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\title{System IPS opaty o iptables}
+\author{Marcin TORGiren Fabrykowski}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\chapter*{Wstęp}
+\addcontentsline{toc}{chapter}{Wstęp}
+\chapter{Opis problemu}
+	\section{O IPS}
+		\subsection{Co to jest IPS}
+		System IPS (ang. Intrusion Prevention System) jest to system wykrywania i blokowania ataków sieciowych.
+		Jego zadanie polega na analizie ruchu sieciowego wchodzącego do oraz przechodzącego przez niego oraz odpowiednie reagowanie w przypadku wykrycia nienormalnych zachowań sieci.
+		\subsection{Schemat działania}
+			\begin{enumerate}
+				\item Analiza ruchu sieciowego
+				\item Wykrycie zachowań pasujących do zdefiniowanych reguł bezpieczeństwa
+				\item Reakcja na wykryte niebezpieczne zachowanie
+				\item Poinformowanie administratora o próbie ataku oraz podjętych działaniach
+				\item Zapisanie danych o ataku oraz podjętych działaniach do bazy danych
+				\item Udostępnienie administratorowi wglądu w historię ataków
+			\end{enumerate}
+	\section{Analiza ruchu sieciowego}
+		\subsection{Używane narzędzie}
+			Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
+		\subsection{Netfilter}
+			\subsubsection{Ogólny zarys}
+				Netfilter jest oprogramowaniem pozwalającym na filtrowanie pakietów, ich translacje (NAT) oraz inne manipulację.
+				Od wersji jądra 2.4.x, pakiet netfilter jest umieszczony wewnątrz niego.
+				Potrafi on dopasowywać analizowane pakiety ze względu na szeroką gamę kryteriów, jak również przeprowadzić szereg operacji na danych pakietach.
+			\subsubsection{Najważniejsze kryteria dopasowania}
+				Netfilter bogaty wachlarz możliwości dopasowywania pakietów
+				\begin{description}
+					\item[-{}-source, -{}-src, -s \textit{\textless adres \textgreater} ] \hfill \\
+						dopasowuje adres źródłowy pakietu do podanego jako \textit{adres}
+					\item[-{}-destination, -{}- dst, -d \textit{\textless adres \textgreater}] \hfill\\
+						dopasowuje adres docelowy pakietu do podanego jako \textit{adres}
+					\item[-{}-protocol, -p \textit{\textless protocol \textgreater}] \hfill \\
+						dopasowuje protokół używany przez pakiet.\\
+						Najczęściej używane protokołu to: \textit{tcp},\textit{udp},\textit{icmp}
+					\item[-{}-source-port, -{}-sport \textit{\textless port \textgreater} ]\hfill\\
+						dopasowuje port źródłowy pakietu.\\
+						Aby użyć tego dopasowania należy zdefiniować protokół.
+					\item[-{}-destination-port, -{}-dport \textit{\textless port \textgreater}] \hfill \\
+						dopasowuje port docelowy pakietu.\\
+						Aby użyć tego dopasowania należy zdefiniować protokół.
+				\end{description}
+				\begin{itemize}
+					\item flagi TCP
+					\item adres MAC
+					\item interface sieciowy
+					\item czas i data
+					\item ilość pakietów w danym czasie
+				\end{itemize}
+			\subsubsection{Najważniejsze działania}
+				\begin{itemize}
+					\item zaakceptowanie
+					\item odrzucenie (DROP, REJECT)
+					\item logowanie pakietu
+					\item zmiana wartości ttl
+					\item zmiana wartości portu
+					\item zmiana wartości adresu
+				\end{itemize}
+\end{document}
