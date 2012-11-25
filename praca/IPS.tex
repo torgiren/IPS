@@ -94,7 +94,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 						dopasowuje adres docelowy pakietu do podanego jako \textit{adres}
 					\item[-{}-protocol, -p \textit{\textless protocol \textgreater}] \hfill \\
 						dopasowuje protokół używany przez pakiet.\\
-%						Najczęściej używane protokołu to: \textit{tcp},\textit{udp},\textit{icmp}
+						Najczęściej używane protokołu to: \textit{tcp},\textit{udp},\textit{icmp}
 					\item[-{}-source-port, -{}-sport \textit{\textless port \textgreater} ]\hfill\\
 						dopasowuje port źródłowy pakietu.\\
 						Aby użyć tego dopasowania należy zdefiniować protokół.
@@ -105,10 +105,10 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 						\textcolor{red}{\Large{DO POPRAWY STYLISTYCZNEJ}}\\
 						\normalsize
 						dopasowuje pakiet, jeżeli wszystkie \textit{flagi} są ustawione, oraz wszystkie flagi wymienione w \textit{masce} oraz niewymienione w \textit{flags} są nieustawione
+					\item[-{}-mac-source \textit{\textless mac-adres \textgreater}] \hfill \\
+						dopasowuje pakiet na podstawie źródłowego adresu sieciowego. Adres podawany jest w formacie: AA:BB:CC:DD:EE:FF.
 				\end{description}
 				\begin{itemize}
-					\item flagi TCP
-					\item adres MAC
 					\item interface sieciowy
 					\item czas i data
 					\item ilość pakietów w danym czasie

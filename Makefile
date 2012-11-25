@@ -1,7 +1,10 @@
-all: konspekt
+all: konspekt praca
 
 konspekt: konspekt.tex
 	pdflatex -interaction=nonstopmode $@
 	pdflatex -interaction=nonstopmode $@
 
-.PHONY: konspekt
+praca:
+	$(MAKE) -C praca
+
+.PHONY: konspekt praca
