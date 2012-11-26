@@ -16,7 +16,7 @@
 \setcounter{tocdepth}{4}
 \begin{document}
 \thispagestyle{empty}
-\includegraphics[height=37.5mm]{agh_nzw_a_pl_1w_wbr_cmyk}\\
+%\includegraphics[height=37.5mm]{agh_nzw_a_pl_1w_wbr_cmyk.eps}
 \rule{30mm}{0pt}
 {\large\textsf{Wydział Fizyki i Informatyki Stosowanej}}\\
 \rule{\textwidth}{3pt}\\
@@ -95,14 +95,26 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				Kolejność przechodzenia pakietu przez tabele i łańcuchy obrazuje rys. \ref{fig:flowchart}.\\
 				\begin{figure}[h]
 					\centering
-						\includegraphics[width=250px]{Netfilter}
+						\includegraphics[width=250px]{Netfilter.png}
 						\caption{Przepływ pakietów w netfilter}
 						\label{fig:flowchart}
 						%http://www.shorewall.net/images/Netfilter.png
 				\end{figure}
-				Gdy pakiet dochodzi do komputera na którym jest netfilter, zostaje on przekazany do łańcucha PREROUTING.\\
+				Gdy pakiet dochodzi do komputera na którym jest netfilter, zostaje on przekazany do łańcucha PREROUTING. Następnie, następuje decyzja o routowaniu pakietu, i w zależności czy pakiet jest kierowany do lokalnego komputera, jest kierowany do łańcucha INPUT, bądź w przypadku gdy ma zostać przekazany dalej, do łańcucha FORWARD oraz POSTROUTING.\\
+				W przypadku, gdy pakiet jest generowany przez nasz komputer, zostaje on przejęty przez łańcuch OUTPUT, a następnie POSTROUTING.
+
 				Pierwszą tablicą przez którą przechodzi pakiet, jest tablica \textit{raw}. W tym miejscu możemy oznaczyć pakiet targetem TRACE, który spowoduje logowanie każdej reguły do której pakiet będzie pasował. Wykorzystywane jest to przy debugowaniu sieci bądź firewalla.
 				Inna opcją która może pojawić się jedynie w tablicy raw, jest target NOTRACK. Spowoduje on nieoznaczenie pakietu przez moduł \textit{conntrack}, który rejestruje pakiety i rozpoznaje je jako istniejące połączenia.
+
+				Następna tablicą do której zostaje przekazany pakiet, jest tablica \textit{mangle}.
+				W tablicy tej możemy manipulować wartościami TTL.
+
+				Kolejną tablicą przetwarzającą pakiet, jest tablica \textit{nat}.
+				W tablicy tej możemy manipulować adresami pakietowymi.
+				W zależności, czy naszym celem jest SNAT cz DNAT, używamy do tego odpowiednich łańcuchów PREROUTING i POSTROUTING
+
+				Ostatnią tablicą, która przetwarza pakiety, jest tablica \textit{filter}. Jest to tablica w której powinno się umieszczać wszystkie reguły dotyczące filtrowania pakietów. 
+				Jeżeli nie zostanie jawnie podana tablica, domyślną tablicą jest tablica \textit{filter}.
 			\subsubsection{Najważniejsze kryteria dopasowania}
 				Netfilter posiada bogaty wachlarz możliwości dopasowywania pakietów
 				\begin{description}
