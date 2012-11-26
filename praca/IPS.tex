@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt,twoside]{book}
+\documentclass[a4paper,12pt,twoside]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{polski}
 \usepackage{polski}
@@ -95,7 +95,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				Kolejność przechodzenia pakietu przez tabele i łańcuchy obrazuje rys. \ref{fig:flowchart}.\\
 				\begin{figure}[h]
 					\centering
-						\includegraphics[width=250px]{Netfilter.png}
+						\includegraphics[width=280px]{Netfilter.png}
 						\caption{Przepływ pakietów w netfilter}
 						\label{fig:flowchart}
 						%http://www.shorewall.net/images/Netfilter.png
@@ -115,6 +115,9 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 
 				Ostatnią tablicą, która przetwarza pakiety, jest tablica \textit{filter}. Jest to tablica w której powinno się umieszczać wszystkie reguły dotyczące filtrowania pakietów. 
 				Jeżeli nie zostanie jawnie podana tablica, domyślną tablicą jest tablica \textit{filter}.
+
+				Jeżeli pakiet zostanie przetworzony przez całą ścieżkę w firewallu i nie zostanie podjęta decyzja o zaakceptowaniu bądź odrzuceniu pakietu, zostaje zastosowana polityka odpowiedniego dla tego pakietu łańcucha głównego, tj. INPUT, OUTPUT, FORWARD.
+				Politykami mogą być TARGET-y terminujące, tj. ACCEPT, REJECT, DROP.
 			\subsubsection{Najważniejsze kryteria dopasowania}
 				Netfilter posiada bogaty wachlarz możliwości dopasowywania pakietów
 				\begin{description}
