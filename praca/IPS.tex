@@ -201,7 +201,34 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 		\subsubsection{Polecenia iptables}
 			Najczęściej wykorzystywane polecenia iptables to:
 			\begin{description}
-				\item[-A] \hfill \\
-					dodawanie nowej reguły 
+				\item[-t \param{tablica}] \hfill \\
+					opcjonalny parametr, który możemy przekazać do każdej poniżej opisanej opcji, definiujący tablicę na której będziemy wykonywać operacje.
+					Jeżeli ten parametr nie zostanie zdefiniowany, domyślną tablicą jest tablica \textit{filter}.
+				\item[-A \param{łańcuch} \param{reguła}] \hfil \\
+					dodawanie nowej reguły na koniec łańcucha.
+				\item[-I \param{łańcuch} {[nr]} \param{reguła}] \hfill \\
+					wstawienie nowej reguły do łańcucha. Jeżeli zostanie podany parametr \textit{nr}, reguła zostaje wstawiona na pozycję \textit{nr}.
+					Jeżeli parametr nie zostanie podany, domyślną wartością jest 1, czyli początek łańcucha.
+				\item[-D \param{łańcuch} \param{reguła}] \hfill \\
+					usuwa z łańcucha regułę podaną przez specyfikację.
+				\item[-D \param{łańcuch} \param{nr}] \hfill \\
+					usuwa z łańcucha regułę podaną przez numer porządkowy, liczony od 1.
+				\item[-N \param{łańcuch}] \hfill \\
+					tworzy nowy łańcuch o nazwie \textit{łańcuch}.
+				\item[-F {[\textit{łańcuch}]}] \hfill \\
+					usuwa wszystkie reguły z zadanego łańcucha. Jeżeli nie zostanie podany łańcuch, wyczyszczone zostaną wszystkie łańcuchy.
+				\item[-X \param{łańcuch}] \hfill \\
+					usuwa zadany łańcuch. Aby móc usunąć łańcuch, musi on być wcześniej wyczyszczony.	
+				\item[-P \param{łańcuch} \param{polityka}] \hfill \\
+					ustawia politykę dla łańcucha.
+				\item[-L {[\textit{łańcuch}]}] \hfill \\
+					wypisuje reguły w łańcuchu. Jeżeli wartość \textit{łańcuch} nie zostanie podana, zostają wypisany wszystkie łańcuchy.\\
+					Często używane opcje polecenia -L, to:
+					\begin{description}
+						\item[-n] \hfill \\
+							nie zamienia adresów ip na nazwy domenowe - często przyśpiesza wypisywanie wyników, gdyż nie oczekujemy na odpowiedzi od revdns-a.
+						\item[-v] \hfill \\
+							tryb gadatliwy. Wypisuje statystyki ilościowe i objętościowe dla wypisywanych reguł
+					\end{description}
 			\end{description}
 \end{document}
