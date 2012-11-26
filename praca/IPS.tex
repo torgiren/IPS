@@ -91,7 +91,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				Od wersji jądra 2.4.x, pakiet netfilter jest umieszczony wewnątrz niego.
 				Potrafi on dopasowywać analizowane pakiety ze względu na szeroką gamę kryteriów, jak również przeprowadzić szereg operacji na danych pakietach.
 			\subsubsection{Zasada działania}
-				Netfilter posiada 4 zdefiniowane tablie: raw, mangle, nat, filter, oraz 5 łańcuchów: PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING.
+				Netfilter posiada 4 zdefiniowane tablice: raw, mangle, nat, filter, oraz 5 łańcuchów: PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING.
 				Kolejność przechodzenia pakietu przez tabele i łańcuchy obrazuje rys. \ref{fig:flowchart}.\\
 				\begin{figure}[h]
 					\centering
@@ -143,7 +143,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 						dopasowuje pakiet ze względu na interface sieciowy na którym dany pakiet się pojawił	
 					\item[-{}-out-interface, -o \param{interface}] \hfill \\
 						dopasowuje pakiet ze względu na interface sieciowy przez który pakiet będzie wysyłany
-					\item[-{}-limit \param{ilosc}/\param{czas}] \hfill \\
+					\item[-{}-limit \param{ilość}/\param{czas}] \hfill \\
 						dopasowuje pakiety, jeśli ich ilość nie przekracza \textit{ilość} w okresie \textit{czas}.\\
 						\textit{Czas} może przyjmować wartości: second, minute, hour, day.
 				\end{description}
@@ -156,14 +156,14 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 					\item[REJECT] \hfill \\
 						odrzucenie pakietu z wysłaniem informacji do adresata. Domyślna wartość odpowiedzi to icmp-port-unreachable.\\
 						Istnieje możliwość ustawienia odpowiedzi wysyłanej do adresata poprzez atrybut -{}-reject-with \param{type},
-						gdzie \textit{type} jest jednym z zdefiniowanych komunitaków:
+						gdzie \textit{type} jest jednym z zdefiniowanych komunikatów:
 						\begin{itemize}
 							\item icmp-net-unreachable
 							\item icmp-host-unreachable
 							\item icmp-port-unreachable
 							\item icmp-prot-unreachable
 							\item icmp-net-prohibited
-							\item icmp-host-prohibitet
+							\item icmp-host-prohibited
 							\item icmp-admin-prohibited.
 						\end{itemize}
 					\item[DROP] \hfill \\
@@ -177,10 +177,10 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 						\begin{description}
 							\item[-{}-ttl-set \param{wartość}] \hfill \\
 								ustawia wartość ttl na podaną
-							\item[-{}-ttl-inc \param{wartosc}] \hfill \\
+							\item[-{}-ttl-inc \param{wartość}] \hfill \\
 								zwiększa wartość ttl o podaną wartość
-							\item[-{}-ttl-dec \param{wartosc}] \hfill \\
-								zmiejsza wartość ttl o podaną wartość
+							\item[-{}-ttl-dec \param{wartość}] \hfill \\
+								zmniejsza wartość ttl o podaną wartość
 						\end{description}
 					\item[REDIRECT] \hfill \\
 						target ten przekierowuje pakiet na siebie. Istnieje również możliwość możliwość zmiany portu w danym pakiecie poprzez opcję: -{}-to-ports \param{port}.
