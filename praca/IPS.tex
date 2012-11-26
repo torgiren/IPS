@@ -90,7 +90,19 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				Netfilter jest oprogramowaniem pozwalającym na filtrowanie pakietów, ich translacje (NAT) oraz inne manipulację.
 				Od wersji jądra 2.4.x, pakiet netfilter jest umieszczony wewnątrz niego.
 				Potrafi on dopasowywać analizowane pakiety ze względu na szeroką gamę kryteriów, jak również przeprowadzić szereg operacji na danych pakietach.
-
+			\subsubsection{Zasada działania}
+				Netfilter posiada 4 zdefiniowane tablie: raw, mangle, nat, filter, oraz 5 łańcuchów: PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING.
+				Kolejność przechodzenia pakietu przez tabele i łańcuchy obrazuje rys. \ref{fig:flowchart}.\\
+				\begin{figure}[h]
+					\centering
+						\includegraphics[width=250px]{Netfilter}
+						\caption{Przepływ pakietów w netfilter}
+						\label{fig:flowchart}
+						%http://www.shorewall.net/images/Netfilter.png
+				\end{figure}
+				Gdy pakiet dochodzi do komputera na którym jest netfilter, zostaje on przekazany do łańcucha PREROUTING.\\
+				Pierwszą tablicą przez którą przechodzi pakiet, jest tablica \textit{raw}. W tym miejscu możemy oznaczyć pakiet targetem TRACE, który spowoduje logowanie każdej reguły do której pakiet będzie pasował. Wykorzystywane jest to przy debugowaniu sieci bądź firewalla.
+				Inna opcją która może pojawić się jedynie w tablicy raw, jest target NOTRACK. Spowoduje on nieoznaczenie pakietu przez moduł \textit{conntrack}, który rejestruje pakiety i rozpoznaje je jako istniejące połączenia.
 			\subsubsection{Najważniejsze kryteria dopasowania}
 				Netfilter posiada bogaty wachlarz możliwości dopasowywania pakietów
 				\begin{description}
