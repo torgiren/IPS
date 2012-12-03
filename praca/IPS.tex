@@ -8,6 +8,9 @@
 \usepackage{geometry}
 \usepackage{titlesec}
 \usepackage{indentfirst}
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
 \geometry{hmargin={2cm, 2cm}, height=10.0in}
 \assignpagestyle{\chapter}{empty}
 \newcommand{\param}[1]{\textit{\textless #1\textgreater}}
@@ -98,8 +101,8 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 					\centering
 						\includegraphics[width=280px]{Netfilter.png}
 						\caption{Przepływ pakietów w netfilter}
-						\label{fig:flowchart}
 						%http://www.shorewall.net/images/Netfilter.png
+						\label{fig:flowchart}
 				\end{figure}
 				Gdy pakiet dochodzi do komputera na którym jest netfilter, zostaje on przekazany do łańcucha PREROUTING. Następnie, następuje decyzja o routowaniu pakietu, i w zależności czy pakiet jest kierowany do lokalnego komputera, jest kierowany do łańcucha INPUT, bądź w przypadku gdy ma zostać przekazany dalej, do łańcucha FORWARD oraz POSTROUTING.\\
 				W przypadku, gdy pakiet jest generowany przez nasz komputer, zostaje on przejęty przez łańcuch OUTPUT, a następnie POSTROUTING.
@@ -232,4 +235,15 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 							tryb gadatliwy. Wypisuje statystyki ilościowe i objętościowe dla wypisywanych reguł
 					\end{description}
 			\end{description}
+\chapter{Wykrywanie zagrożeń}
+	\section{SSH BruteForce}
+		\subsection{Opis}
+			Atak polega na ciągłej próbie połączenia się z~atakowanym komputerem za pomocą protokołu SSH, używając za każdym innego hasła z~listy haseł. Jeżeli hasło użytkownika, znajduje się na liście haseł atakującego, istnieje duże prawdopodobieństwo, że atakującemu uda się przy którejś próbie połączyć z~atakowanym komputerem.
+		\subsection{Obrona}
+			Jako obronę na ten typ ataku, zastosuję ograniczenie liczby połączeń z~usługą SSH do 5 na minutę.
+			Po wykryciu większej ilości połączeń, wygenerowany zostanie komunikat z~ostrzeżeniem.
+		\subsection{Implementacja}
+			\scriptsize{
+			\verbatimtabinput{./../firewall/firewall_brute.sh}
+			}
 \end{document}
