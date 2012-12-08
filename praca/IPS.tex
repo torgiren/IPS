@@ -243,7 +243,40 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Jako obronę na ten typ ataku, zastosuję ograniczenie liczby połączeń z~usługą SSH do 5 na minutę.
 			Po wykryciu większej ilości połączeń, wygenerowany zostanie komunikat z~ostrzeżeniem.
 		\subsection{Implementacja}
-			\scriptsize{
+			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_brute.sh}
-			}
+			\normalsize
+	\section{SYN Flood}
+		\subsection{Opis}
+			Atak ten jest jednym z~ataków DoS (Denial of Service) i~polega wysyłaniu dużej ilości pakietów SYN do atakowanego hosta w~celu nieumożliwienia pozostałym użytkownikom sieci skorzystanie z~atakowanej usługi.
+			
+			Atak ten wykorzystuje specyfikę protokołu TCP i~sposobu w~jaki protokół ten nawiązuje połączenie. Aby nawiązać połączenie komputer łączący się wysyła pakiet SYN do serwera.\\
+			Serwer po otrzymaniu takiego pakietu, tworzy w~tablicy połączeń wpis ze stanem ``SYN RECEIVED'' oraz odpowiada na to żądanie pakietem SYN+ACK sygnalizując swoją gotowość do nawiązania połączenia.\\
+			Następnie komputer łączący się wysyła pakiet ACK. Po takim nawiązaniu połączenia, nazywanym \textit{three\dywiz way handshake}, oba hosty przeszły w~stan połączeniowy (ESTABLISHED) i~mogą zacząć wysyłać dane.
+
+			Atak ten polega na wysyłaniu dużej ilości spreparowanych pakietów SYN, z~podmienionymi adresami źródłowymi, do atakowanego hosta.
+			W~efekcie atakowany host odpowiada pakietami SYN+ACK na adres podany jako adres źródłowy. Jeżeli jako adres źródłowy został podany aktywny host w~sieci i~otrzyma on nieoczekiwaną odpowiedź SYN+ACT, odpowie na nią pakietem RST.
+			Po tej odpowiedzi atakowany host usunie wpis o~połączeniu ze swojej tablicy.\\
+			Jeżeli natomiast jako adres źródłowy podamy nieaktywnego hosta w~sieci, atakowany host odpowie do niego pakietem SYN+ACT i~nie dostanie odpowiedzi, gdyż host jest nieaktywny.
+			Spowoduje to, że atakowany host będzie czekał ustalony jako TIMEOUT czas, aż uzna że taki host nie istnieje i~wtedy usunie wpis z~tablicy połączeń.
+			Przez ten czas, wpis jest obecny w~tablicy połączeń. Jeżeli wysłana zostanie duża ilość pakietów SYN ze zmienionymi adresami źródłowymi,
+			połączenia w~stanie SYN RECEIVED wypełnią całą tablicę i~nie będą przyjmowane kolejne połączenia.\\
+			W~takim przypadku, próby połączenia się z~atakowanym hostem przez zwykłych użytkowników zakończą się niepowodzeniem, gdyż host nie będzie przyjmował nowych połączeń z~powodu przepełnienia tablicy połączeń.
+			Jednocześnie, tablica ta nie będzie wolna, gdyż wysyłana w~sposób ciągły fala pakietów SYN przez atakującego, wypełnia wolne miejsca po połączeniach, które zostały już usunięte z~powodu przekroczenia TIMEOUT.
+			
+			Nowsze wersje jądra Linux\dywiz a~posiada wbudowaną obronę przez SYN Floodem.
+			Aby zasymulować starszą wersję systemu, wyłączymy mechanizm syn\_cookies:
+			\footnotesize
+			\begin{verbatim}
+			echo "0" > /pros/sys/net/ipv4/tcp_syncoockies
+			\end{verbatim}
+			\normalsize
+			
+		\subsection{Obrona}
+			Aby zabezpieczyć się przed tego typu atakami, należy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.\\
+			Jako domyślne wartości przyjąłem 1 połączenie przychodzące na sekundę, aktywowane po 5 pakietach.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_syn_flood.sh}
+			\normalsize
 \end{document}
