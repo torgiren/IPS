@@ -1,6 +1,6 @@
 iptables -N SSH_BRUTE_DROPLOG
 iptables -A SSH_BRUTE_DROPLOG
-iptables -A SSH_BRUTE_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name burute_log \ 
+iptables -A SSH_BRUTE_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name burute_log \
 	--hashlimit-burst 1 -j LOG --log-prefix "SSH_BRUTEFORCE"
 iptables -A SSH_BRUTE_DROPLOG -j REJECT
 
