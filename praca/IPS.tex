@@ -296,6 +296,18 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Obrona przed atakami wykorzystującymi wysycanie łącza jest niemożliwa przy użyciu netfilter.\\
 			Wynika to z~faktu, że gdy host jest atakowany dużą ilością pakietów, które wysycają łącze, netfilter może odrzucać pakiety agresora dopiero gdy docierają one do firewalla,
 			czyli gdy już wysycą łącze. Nie ma możliwości przy użyciu narzędzia netfilter na zapobieganiu dostarczania pakietów do naszego komputera.
+	\section{ICMP Timestamp Request}
+		\subsection{Opis}
+			Żądanie ICMP Timestamp Request o~numerze 13, jest badaniem podania czasu serwera.
+			Nie jest ono samo w~sobie atakiem, ale poznanie dokładnego czasu atakowanego hosta, może ułatwić złamanie algorytmów bazujących na generatorach liczb pseudolosowych opartych o~aktualny czas.
+			
+			Do serwera wysyłane jest zapytanie o~numerze typu 13, a~odpowiedź jest odsyłana w~ICMP Timestamp Reply o~numerze 14. Wiele nowoczesnych systemów w~domyślnej konfiguracji blokuje pakiety Timestamp Request.
+		\subsection{Obrona}
+			W~przypadku kiedy nie używamy synchronizacji czasu z~serwerem za pomocą ICMP, możemy blokować zapytania tego typu.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_timestamp_request.sh}
+			\normalsize
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}

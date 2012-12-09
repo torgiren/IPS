@@ -12,3 +12,5 @@ iptables -X SYN_FLOOD
 iptables -F SYN_FLOOD_DROPLOG
 iptables -X SYN_FLOOD_DROPLOG
 
+iptables -F TIMESTAMP_DROPLOG
+iptables -X TIMESTAMP_DROPLOG
