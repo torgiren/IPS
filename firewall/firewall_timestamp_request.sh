@@ -1,6 +1,6 @@
 iptables -N TIMESTAMP_DROPLOG
 iptables -A TIMESTAMP_DROPLOG
-iptables -A TIMESTAMP_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name syn_flood_log \
+iptables -A TIMESTAMP_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name timestamp_log \
 	--hashlimit-burst 1 -j LOG --log-prefix "ICMP_TIMESTAMP_REQUEST"
 iptables -A TIMESTAMP_DROPLOG -j REJECT
 
