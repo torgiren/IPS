@@ -10,6 +10,7 @@
 \usepackage{indentfirst}
 \usepackage{verbatim}
 \usepackage{moreverb}
+\usepackage{nameref}
 \usepackage[font=footnotesize,labelfont=bf]{caption}
 \geometry{hmargin={2cm, 2cm}, height=10.0in}
 \assignpagestyle{\chapter}{empty}
@@ -234,6 +235,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				\end{description}
 		\end{description}
 \chapter{Wykrywanie zagrożeń}
+	\label{sec:wykrywanie}
 	\section{SSH BruteForce}
 		\subsection{Opis}
 			Atak polega na ciągłej próbie połączenia się z~atakowanym komputerem za pomocą protokołu SSH, używając za każdym innego hasła z~listy haseł. Jeżeli hasło użytkownika, znajduje się na liście haseł atakującego, istnieje duże prawdopodobieństwo, że atakującemu uda się przy którejś próbie połączyć z~atakowanym komputerem.
@@ -245,6 +247,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\verbatimtabinput{./../firewall/firewall_brute.sh}
 			\normalsize
 	\section{SYN Flood}
+		\label{sec:syn_flood}
 		\subsection{Opis}
 			Atak ten jest jednym z~ataków DoS (Denial of Service) i~polega wysyłaniu dużej ilości pakietów SYN do atakowanego hosta w~celu nieumożliwienia pozostałym użytkownikom sieci skorzystanie z~atakowanej usługi.
 			
@@ -274,6 +277,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Aby zabezpieczyć się przed tego typu atakami, należy limitować ilość przychodzących pakietów SYN od jednego odbiorcy.\\
 			Jako domyślne wartości przyjąłem 1 połączenie przychodzące na sekundę, aktywowane po 5 pakietach.
 		\subsection{Implementacja}
+			\label{sec:syn_flood_impl}
 			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_syn_flood.sh}
 			\normalsize
@@ -308,6 +312,38 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_timestamp_request.sh}
 			\normalsize
+	\section{Skanowanie portów pakietami SYN}
+		\subsection{Opis}
+			Skanowanie portów pozwala na zbadanie atakowanego hosta pod kątem udostępnianych przez niego usług. Znając działające usługi na hoście, można dobierać odpowiednie metody.		
+			
+			Wysyłając pakiet SYN na skanowany port, host może zareagować na 4 sposoby:
+			\begin{description}
+			\item[odpowiedź SYN+ACK]\hfill \\
+			oznacza ona, że port jest otwarty i~nasłuchuje na nim jakaś usługa.
+			Odpowiedź SYN+ACK jest drugim pakietem wymienianym w~\textit{3-way handshake}, co pokazuje nam, że została rozpoczęta procedura nawiązywania połączenia.
+			\item[odpowiedź RST+ACK]\hfill \\
+			oznacza ona, że port jest zamknięty.
+			Jeżeli host otrzymuje żądanie SYN na port na którym nie jest spodziewane nawiązywanie połączenia, odpowiada pakietem z~ustawioną flagą reset, która informuje o~zerwaniu połączenia (w~tym przypadku o~zerwaniu próby połączenia z~portem)
+			\item[odpowiedź ICMP error message]\hfill \\
+			oznacza ona, że port jest filtrowany na firewallu przez reguły REJECT, które generują odpowiedź do klienta o~niemożności połączenia się z~portem.
+			Taka odpowiedź daje nam informacje, że na skanowanym hoście jest aktywny firewall, natomiast nie daje nam wiedzy czy na danym porcie działa jakaś usługa - połączenia mogą być filtrowane ze względu na IP źródłowe.
+			\item[brak odpowiedzi]\hfill \\
+			może być oznaką zarówno błędów sieci i~zgubienia pakietów (w~przypadku ograniczenia liczby retransmisji), bądź obecności firewalla i~filtrowania pakietów metodą DROP.
+			Pakiety takie zostają upuszczone i~nie zostaje wysyła odpowiedź do hosta skanującego.
+			Scenariusz błędów sieci jest zwykle mniej prawdopodobny, dlatego brak odpowiedzi najczęściej świadczy o~obecności firewalla na skanowanym hoście.
+			
+			Skanowanie portów metodą pakietów SYN jest bardzo podobne do metody ataku SYN Flood.
+			Istnieją jednak pewne aspekty odróżniające te dwa działania, a~mianowicie:
+			\begin{itemize}
+			\item ilość wysyłanych pakietów - w~SYN Flood wysyłamy bardzo dużo pakietów, aby zapełnić tablicę połączeń, w~skanowaniu wystarczy wysłać po jednym pakiecie na każdy badany port
+			\item adres źródłowy pakietów - w~SYN Flood podawaliśmy nieistniejący adres źródłowy, aby połączenie trwało w~oczekiwaniu na odpowiedź,
+			natomiast w~skanowaniu portów, podajemy swój adres jako adres źródłowy, abyśmy mogli odebrać i~zinterpretować odpowiedź serwera.
+			\end{itemize}
+		\subsection{Obrona}
+			Metoda obrony przed skanowaniem portów metodą SYN jest taka sama jak w~przypadku SYN Flood, gdyż tak samo otrzymujemy dużą ilość pakietów SYN.
+			\end{description}
+		\subsection{Implementacja}
+			Patrz: \ref{sec:syn_flood_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_flood}/\nameref{sec:syn_flood_impl} na stronie \pageref{sec:syn_flood_impl}.
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
