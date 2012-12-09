@@ -277,4 +277,25 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_syn_flood.sh}
 			\normalsize
+	\section{ICMP Flood}
+		\subsection{Opis}
+			ICMP Flood to najczęstszy z~ataków mających na celu całkowite odcięcie dostępu do atakowanego hosta.
+			Polega on na wysyłaniu bardzo dużej ilości danych. Ilość tych danych musi być większa niż przepustowość łącza atakowanego hosta.
+			Następuje wtedy nasycenie pasma, i~żądania od zwykłych klientów nie są dostarczane do hosta.
+			Następuje odmowa dostępu.
+			
+			Ataki tego tupu noszą nazwę DoS (Denial of Service) gdyż powodują odmowę dostępu do usługi.
+			Jednakże, aby wykonać taki atak, atakujący musi dysponować łączem o~większej przepustowości niż atakowany host.\\
+			Istnieje również odmiana ataków DoS poprzez flooda nie wymagająca większego łącza. Są to ataki DDoS (Distributed Denial of Service).
+			Działają one w~myśl tej samej idei wysycania łącza atakowanego hosta, jednak uzyskiwane jest to przy użyciu wielu komputerów atakujących.
+			W~takim przypadku suma przepustowości wszystkich atakujących komputerów musi być większa niż pasmo atakowanego hosta.\\
+			Do takich ataków najczęściej wykorzystywane są tzw. \textit{botnet\dywiz y}, czyli sieci komputerów zainfekowanych wirusami,
+			które przez większą część swojego życia na zainfekowanym komputerze nie wykazują żadnej aktywności.
+			W~momencie kiedy właściciel takiego botneta chce go wykorzystać, rozsyłana jest informacja do wszystkich zainfekowanych komputerów o~celu ataku i~przeprowadzany jest atak.
+		\subsection{Obrona}
+			Obrona przed atakami wykorzystującymi wysycanie łącza jest niemożliwa przy użyciu netfilter.\\
+			Wynika to z~faktu, że gdy host jest atakowany dużą ilością pakietów, które wysycają łącze, netfilter może odrzucać pakiety agresora dopiero gdy docierają one do firewalla,
+			czyli gdy już wysycą łącze. Nie ma możliwości przy użyciu narzędzia netfilter na zapobieganiu dostarczania pakietów do naszego komputera.
+\appendix
+\chapter{Zbiór explotów testujących system IPS}
 \end{document}
