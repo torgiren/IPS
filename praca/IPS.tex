@@ -331,6 +331,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			może być oznaką zarówno błędów sieci i~zgubienia pakietów (w~przypadku ograniczenia liczby retransmisji), bądź obecności firewalla i~filtrowania pakietów metodą DROP.
 			Pakiety takie zostają upuszczone i~nie zostaje wysyła odpowiedź do hosta skanującego.
 			Scenariusz błędów sieci jest zwykle mniej prawdopodobny, dlatego brak odpowiedzi najczęściej świadczy o~obecności firewalla na skanowanym hoście.
+			\end{description}
 			
 			Skanowanie portów metodą pakietów SYN jest bardzo podobne do metody ataku SYN Flood.
 			Istnieją jednak pewne aspekty odróżniające te dwa działania, a~mianowicie:
@@ -341,7 +342,6 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\end{itemize}
 		\subsection{Obrona}
 			Metoda obrony przed skanowaniem portów metodą SYN jest taka sama jak w~przypadku SYN Flood, gdyż tak samo otrzymujemy dużą ilość pakietów SYN.
-			\end{description}
 		\subsection{Implementacja}
 			Patrz: \ref{sec:syn_flood_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_flood}/\nameref{sec:syn_flood_impl} na stronie \pageref{sec:syn_flood_impl}.
 \appendix
