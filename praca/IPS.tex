@@ -313,6 +313,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\verbatimtabinput{./../firewall/firewall_timestamp_request.sh}
 			\normalsize
 	\section{Skanowanie portów pakietami SYN}
+		\label{sec:syn_scan}
 		\subsection{Opis}
 			Skanowanie portów pozwala na zbadanie atakowanego hosta pod kątem udostępnianych przez niego usług. Znając działające usługi na hoście, można dobierać odpowiednie metody.		
 			
@@ -343,7 +344,17 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 		\subsection{Obrona}
 			Metoda obrony przed skanowaniem portów metodą SYN jest taka sama jak w~przypadku SYN Flood, gdyż tak samo otrzymujemy dużą ilość pakietów SYN.
 		\subsection{Implementacja}
+			\label{sec:syn_scan_impl}
 			Patrz: \ref{sec:syn_flood_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_flood}/\nameref{sec:syn_flood_impl} na stronie \pageref{sec:syn_flood_impl}.
+	\section{Skanowanie portów funkcjami systemowymi}
+		\subsection{Opis}
+			Skanowanie portów funkcjami systemowymi, wykorzystuje oferowaną przez system operacyjny obsługę połączeń sieciowych.
+			Nie dają one możliwości preparowania pakietów, dlatego w~przypadku natrafienia na otwarty port przeprowadzana jest kompletna procedura \textit{3-way\dywiz handshake} jak również nie ma możliwości zmiany adresów źródłowych ani innych wartości w~ramkach pakietu.
+			Jednak, jest to jedyna metoda która może być wykonana na komputerze bez dostępu do konta administratora.
+		\subsection{Obrona}
+			Funkcje systemowe aby nawiązać połączenie wysyłają pakiety SYN, dlatego obrona przed tego typu skanowaniem jest taka sama jak przy wysyłaniu spreparowanych pakietów SYN.
+		\subsection{Implementacja}
+			Patrz: \ref{sec:syn_scan_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_scan}/\nameref{sec:syn_scan_impl} na stronie \pageref{sec:syn_scan_impl}.
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
