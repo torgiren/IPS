@@ -14,3 +14,8 @@ iptables -X SYN_FLOOD_DROPLOG
 
 iptables -F TIMESTAMP_DROPLOG
 iptables -X TIMESTAMP_DROPLOG
+
+iptables -F ACK_SCAN
+iptables -X ACK_SCAN
+iptables -F ACK_SCAN_DROPLOG
+iptables -X ACK_SCAN_DROPLOG

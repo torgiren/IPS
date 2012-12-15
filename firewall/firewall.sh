@@ -9,4 +9,8 @@ echo "SYN Flood"
 ./firewall_syn_flood.sh
 echo "Timestamp Request"
 ./firewall_timestamp_request.sh
+echo "ACK Scan"
+./firewall_ack_scan.sh
+
+
 iptables -A INPUT -m state --state NEW -j IPS
