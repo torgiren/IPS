@@ -355,6 +355,18 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Funkcje systemowe aby nawiązać połączenie wysyłają pakiety SYN, dlatego obrona przed tego typu skanowaniem jest taka sama jak przy wysyłaniu spreparowanych pakietów SYN.
 		\subsection{Implementacja}
 			Patrz: \ref{sec:syn_scan_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_scan}/\nameref{sec:syn_scan_impl} na stronie \pageref{sec:syn_scan_impl}.
+	\section{Skanowanie portów pakietami ACK}
+		\subsection{Opis}
+			Skanowanie portów pakietami ACK wykorzystuje specyfikację protokołu TCP, który na nieoczekiwany pakiet z~flagą ACK odpowiada pakietem RST.
+
+			Wysyłając spreparowany pakiet TCP z~ustawioną flagą ACK, sprawiamy że system operacyjny na atakowanym hoście, nie jest w~stanie go dopasować do żadnego istniejącego połączenia i~odsyła pakiet z~ustawioną flagą RST do atakującego hosta informując w~ten sposób o~nieprawidłowościach.\\
+			Po otrzymaniu odpowiedzi RST mamy informację, że atakowany nie filtruje na firewallu danego portu.
+
+			Metoda ta nie daje informacji czy na danym porcie jest uruchomiona jakaś usługa, a~jedynie czy dany port jest filtrowany na firewallu.
+			W~przypadku filtrowania portu, nie dostaniemy żadnej odpowiedzi, gdyż pakiet zostanie upuszczone.
+			W~przypadku braku firewalla, wysłana zostanie odpowiedź RST.
+		\subsection{Obrona}
+			Aby obronić się przed takim atakiem, powinniśmy blokować wszystkie pakiety mające ustawioną flagą ACK oraz będące interpretowane jako nowe połączenia zamiast ustanowione.
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
