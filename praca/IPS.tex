@@ -371,6 +371,60 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_ack_scan.sh}
 			\normalsize
+	\section{Spoofing z~sieci wewnętrznej}
+		\subsection{Opis}
+			Ataki wykorzystujące spoofing polegają na podszywaniu się pod innego użytkownika sieci.
+			Mają one na celu zafałszowanie informacji o~atakującym.\\
+			Wykonując atak SYN FLOOD (patrz: \ref{sec:syn_flood}), używaliśmy spoofingu w~celu opóźnienia usuwania wpisów z~tablicy.
+			Jednak spoofingu można użyć np: do wykonania podejrzanego skanowania portów jako inny użytkownik sieci.
+			Sprawi to, że administrator sieci, bazując na zapisach adresu IP z~którego zostało wykonane skanowanie portów bądź inna próba ataku, skupi się na jego analizie, co może przysporzyć nieprzyjemności podszywanemu użytkownikowi sieci.\\
+			Innym celem takiego ataku, może być wywołaniu kilku oczywistych ataków z~komputerów ofiar, tak, aby skupić uwagę administratora na tamtych wydarzeniach i~w~tym czasie wykonać cichy atak na serwer.\\
+			Wyróżniamy dwa główne typu spoofingu:
+			\begin{description}
+				\item[IP Spoofing]\hfill \\
+					Polega on na preparowaniu pakietów podmieniając adres źródłowy IP.
+					Efektem takiego ataku jest interpretowanie takich pakietów przez serwer jako pakietów wysyłany przez komputer ofiary.
+					Minusem tej metody jest to, że odpowiedzi generowane przez serwer odsyłane są do komputera ofiary, ponieważ jej  komputer odpowiada na zapytania ARP od serwera.\\
+					Ominięciem tej niedogodności jest ustawienie ręczne adresu IP identycznego z~adresem ofiary.
+					Wtedy mamy możliwość nawiązywania pełnych połączeń z~serwerem jako komputer ofiary.
+				\item[ARP Spoofing]\hfill \\
+					Atak ten polega na podmianie wpisów w~pamięci podręcznej protokołu ARP.
+					
+					Protokół ARP(ang. Address Resolution Protocol) jest protokołem pozwalającym na dopasowanie adresów MAC do adresów IP.
+					Komunikacja wykorzystująca adresy IP wykonywana jest w~3 warstwie modelu OSI - warstwie sieciowej.
+					Jednakże, przełączniki działają w~warstwie 2 - warstwie łącza danych, dlatego wysyłając pakiet IP, należy go opakować w~ramkę łącza danych zawierającą adres MAC odbiorcy i~nadawcy.
+					Aby użytkownik nie musiał podawać tej wartości, opracowany został protokół ARP.\\
+					Zasada działania protokołu ARP:\\
+					Jeżeli system operacyjny chce wysłać pakiet do odbiorcy o~podanym adresie IP, sprawdza pamięć podręczną w~poszukiwaniu adresu MAC odbiory.
+					W~sytuacji w~której adres ten zostanie tam znaleziony, zostaje on wykorzystany.
+					W~przeciwnym przypadku system wysyła do wszystkich komputerów w~sieci zapytanie o~adres MAC komputera o~poszukiwanym IP.
+					Na tą prośbę odpowiada poszukiwany komputer, odpowiadając pakietem podpisanym swoim adresem MAC.
+					Po otrzymaniu takiego pakietu, adres MAC zostaje zapisany w~pamięci podręcznej i~wykorzystany do wysłania pierwotnej wiadomości.
+					
+					Podatnością tego protokołu jest interpretacja odpowiedzi ARP bez wcześniejszego zgłaszania zapotrzebowania na adres.
+					Atak ARP Spoofing polega na wysłaniu do atakowanego hosta informacji ARP Reply zawierającej adres źródłowy podszywanego komputera oraz MAC adres atakującego.
+					Atakowany host po otrzymaniu takiej informacji zapisze ją w~pamięci podręcznej, bądź, jeśli już istniał wpis dla takiego adres IP - nadpisze starą informację nowa.
+					Spowoduje to, że wysyłane pakiety z~serwera do podszywanego komputera będą podpisywane adresem MAC atakującego, gdyż jego MAC znajduje się w~pamięci podręcznej atakowanego hosta.
+					Atakujący host powinien mieć ustawioną opcję ip\_forward aby pakiet docelowo wysłany do podszywanego komputera, docierający do atakującego, mógł zostać wysłany dalej aby mógł osiągnąć swój cel.
+					Jednak przechodząc przez komputer atakującego, daje on możliwość przechwycenia znajdujących się w~nim informacji a~nawet ingerencję w~jego zawartość.
+			\end{description}
+		\subsection{Obrona}
+			Najlepszą metodą obrony przed spoofingiem jest zbudowanie bazy znanych hostów sieci wewnętrznej i~umieszczenie jej w~kontenerze IPSet.
+			Najlepiej nadającym do się do tego tupu zadań kontenerem jest kontener typu \textit{MACIPMAP}.
+			Przechowuje on pary adres MAC\dywiz adres IP.
+			Następnie dla każdego pakietu przychodzącego do serwera należy sprawdzić czy jego para IP\dywiz MAC znajduje się w~bazie.
+			Jeżeli nie znajduje się, może to oznaczać jedną z~dwóch możliwości:
+			\begin{itemize}
+				\item jest to nowy host w~sieci
+				\item nastąpiła próba spoofingu
+			\end{itemize}
+			Aby wykluczyć pierwszą możliwość, administrator może sprawdzić czy MAC adres pakietu znajduje się w~bazie.
+			Jeżeli znajduje się, to oznacza to, że pakiet został spreparowany i~prawdopodobnie wysłany w~celu przeprowadzenia ataku.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_spoofing_wew.sh}
+			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
+			\normalsize
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
