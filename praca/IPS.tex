@@ -420,6 +420,11 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\end{itemize}
 			Aby wykluczyć pierwszą możliwość, administrator może sprawdzić czy MAC adres pakietu znajduje się w~bazie.
 			Jeżeli znajduje się, to oznacza to, że pakiet został spreparowany i~prawdopodobnie wysłany w~celu przeprowadzenia ataku.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_spoofing_wew.sh}
+			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
+			\normalsize
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
