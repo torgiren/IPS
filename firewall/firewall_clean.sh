@@ -19,3 +19,8 @@ iptables -F ACK_SCAN
 iptables -X ACK_SCAN
 iptables -F ACK_SCAN_DROPLOG
 iptables -X ACK_SCAN_DROPLOG
+
+iptables -F ZEW_SPOOF
+iptables -X ZEW_SPOOF
+iptables -F ZEW_SPOOF_DROPLOG
+iptables -X ZEW_SPOOF_DROPLOG
