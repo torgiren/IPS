@@ -425,6 +425,11 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\verbatimtabinput{./../firewall/firewall_spoofing_wew.sh}
 			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
 			\normalsize
+	\section{Spoofing z zewnątrz}
+		\subsection{Opis}
+			Ataki tego typu polegają na podszywaniu się pod hosty z sieci wewnętrznej przy połączeniach z sieci zewnętrznej.
+		\subsection{Obrona}
+			Aby obronić się przed tego typu atakami, należy filtrować wszystkie pakiety przychodzące na interfejs zewnętrzny posiadające adresy źródłowe należące do klas prywatnych.
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
