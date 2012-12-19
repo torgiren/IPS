@@ -428,6 +428,9 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 	\section{Spoofing z zewnątrz}
 		\subsection{Opis}
 			Ataki tego typu polegają na podszywaniu się pod hosty z sieci wewnętrznej przy połączeniach z sieci zewnętrznej.
+			Może to prowadzić do prowadzić do wykonania ataku DDoS przy użyciu adresu broadcast. 
+			Wysyłając pakiety z ustawionym adresem źródłowym na IP atakowanego hosta, IP docelowym na broadcast oraz docelowym adresem MAC na adres serwera, zostaną one przekazane przez serwer na adres broadcast, po czym każdy host w sieci odpowie na taki pakiet do hosta wskazanego przez adres źródłowy.
+			Efektem tego może być kilkudziesięciokrotne zwiększenie liczby otrzymywanych przez atakowanego hosta pakietów do liczby wysyłanych pakietów przez atakującego.
 		\subsection{Obrona}
 			Aby obronić się przed tego typu atakami, należy filtrować wszystkie pakiety przychodzące na interfejs zewnętrzny posiadające adresy źródłowe należące do klas prywatnych.
 \appendix
