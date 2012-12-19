@@ -433,6 +433,11 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Efektem tego może być kilkudziesięciokrotne zwiększenie liczby otrzymywanych przez atakowanego hosta pakietów do liczby wysyłanych pakietów przez atakującego.
 		\subsection{Obrona}
 			Aby obronić się przed tego typu atakami, należy filtrować wszystkie pakiety przychodzące na interfejs zewnętrzny posiadające adresy źródłowe należące do klas prywatnych.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_spoofing_zew.sh}
+			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
+			\normalsize
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
