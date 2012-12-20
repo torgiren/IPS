@@ -162,6 +162,79 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 				Wynika to z faktu, że wartość Internet Header Length zawiera długość nagłówkach w 32 bitowych słowach.
 				Aby wartość ta miała prawo bytu, nagłówek musi być długości wielokrotności słowa.
 			\end{description}	
+	\section{TCP}
+		\subsection{Opis}
+			TCP (ang. \textit{Transmission Control Protocol}) jest połączeniowym protokołem transportowym.
+			Odpowiada on za nawiązywanie połączenia oraz jego kontrolowanie.
+
+			Protokół TCP często jest protokołem transportowym dla IP.
+			Razem tworzą najpowszechniejszą parę TCP/IP.
+			Protokół IP używany jest jedynie do określania nadawcy pakietu, natomiast określanie usług docelowych leży po stronie TCP.\\
+
+			Dodatkowo, protokół TCP oddziela różne równoległe strumienie danych pomiędzy dwa hostami.
+			Wprowadza on, obok adresów IP źródłowych i docelowych z protokołu IP, porty - źródłowy i docelowy.
+			Używając kwartetu parametrów, TCP jest wstanie jednoznacznie sprecyzować, do którego połączenia należy pakiet.\\
+			Połączenie zwykle nawiązywane jest z losowego portu źródłowego (zwykle numer portu źródłowego jest większy niż 1024) na znany port docelowy.
+			Numery portów poniżej 1024 są zarezerwowane dla tzw. \textit{Well known ports} czyli usług o zwyczajowo przypisanych stałych portach.
+			Najważniejszymi dobrze znanymi portami są:
+			\begin{itemize}
+				\item 80 - WWW
+				\item 110 - POP3
+				\item 25 - SMTP
+				\item 22 - SSH
+				\item 21 - FTP
+				\item 20 - FTP-DATA
+				\item 23 - TELNET
+			\end{itemize}
+		\subsection{Nagłówek TCP}
+			Każdy pakiet TCP zostaje opakowany w ramkę TCP.
+			Schemat takiej ramki został pokazany na rys. \ref{fig:ramka_tcp}.
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=400px]{tcp.png}
+				\caption{Ramka pakietu IP}
+				%http://www.netguru.net/ntc/ntcgrap/Image54.gif
+				\label{fig:ramka_tcp}
+			\end{figure}
+			Znaczenie poszczenie poszczególnych pól jest następujące:
+			\begin{description}
+			\item[Source Port, 16bit]\hfill \\
+				Numer portu źródłowego.
+			\item[Destination Port, 16bit]\hfill \\
+				Numer portu docelowego.
+			\item[Sequence Number, 32bit]\hfill \\
+				Numer sekwencyjny pakietu.
+			\item[Acknowledgment Number, 32bit]\hfill \\
+				Numer sekwencyjny odpowiedzi.	
+			\item[Data Offset, 4bit]\hfill \\
+				Odległość od początku pakietu w którym zaczynają się dane.
+				Wartość wyrażona w 32 bitowych słowach.
+			\item[Flags, 9bit]\hfill \\
+				Zawiera flagi cechujące dany pakiet TCP.
+				Najważniejsze używane flagi to:
+				\begin{itemize}
+					\item SYN - oznacza pakiety przeprowadzające synchronizację numerów sekwencyjnych
+					\item ACK - oznacza pakiety potwierdzające otrzymanie pakietów
+					\item FIN - oznacza pakiet żądanie zakończenia połączenia
+					\item RST - oznacza natychmiastowe resetowanie połączenia.
+				\end{itemize}
+			\item[Window, 16bit]\hfill \\
+				Rozmiar okna. Mechanizm okna pozwala na kontrolowanie przepływu danych oraz przyśpieszenie wysyłania danych.
+			\item[Checksum, 16bit]\hfill \\
+				Suma kontrolna nagłówka. Pozwala sprawdzić czy nagłówek nie uległ modyfikacji podczas przesyłania.
+			\item[Urgent Pointer, 16bit]\hfill\\
+				\textcolor{red}{\Large{Nie rozumiem idei tego pola. Byłbym wdzięczny za pomoc}}
+			\item[Options]\hfill\\
+				Inne dodatkowe parametry cechujące pakiet
+			\item[Padding]\hfill\\
+				Dopełnienie nagłówka zerami do rozmiaru będącego wielokrotnością słowa.
+			\end{description}
+
+		\subsection{Nawiązywanie połączenia}
+			Aby nawiązać połączenie przy użyciu protokołu TCP, należy przeprowadzić procedurę połączeniową, zwaną \textit{3 way handshake}, ponieważ, aby nawiązać połączenie, potrzeba wymienić trzy pakiety.\\
+			Początkowo, host inicjujący połączenie, wysyła pakiet z ustawioną flagą SYN, oraz specjalnie wygenerowaną losową wartością pola SEQ. Host odbierający pakiet SYN, odpowiada pakietem z ustawionymi flagami SYN oraz ACK, oraz specjalnie wygenerowaną wartością losową SEQ, natomiast wartość pola ACK zawiera wartość SEQ z pakietu SYN powiększoną o 1.
+			W odpowiedzi host inicjujący połączenie wysyła pakiet z flagą ACK oraz wartościami SEQ równej pierwszej wartości SEQ powiększonej o jeden, oraz ACK zawierająca wartość SEQ z pakietu SYN+ACK powiększoną o 1.\\
+			Po wymienieniu tych trzech pakietów, połączenie zostaje nawiązane.
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
