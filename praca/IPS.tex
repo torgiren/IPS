@@ -438,6 +438,18 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\verbatimtabinput{./../firewall/firewall_spoofing_zew.sh}
 			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
 			\normalsize
+	\section{Wirusy}
+		\subsection{Opis}
+			Obecność wirusów w sieci może prowadzić do infekowania kolejnych komputerów, a w przypadku utworzenia tzw. \textit{botnet}-u, przeprowadzenie ataku.
+			Aktywność większości wirusów charakteryzuje się wysyłaniem dużej ilości poczty elektronicznej.
+		\subsection{Obrona}
+			Należy wychwytywać i blokować poczty elektronicznej.
+			Jednakże, należy tutaj uważać, na tzw. \textit{false-positive} dopasowania, czyli uznanie normalnego ruchu pocztowego jako ruchu spamowego.
+			Sytuacja taka może nastąpić podczas wysyłania aplikacji do pracy, gdzie następuje wysyłanie dużej ilości wiadomości do pracodawców.
+		\subsection{Implementacja}
+			\footnotesize
+			\verbatimtabinput{./../firewall/firewall_wirusy.sh}
+			\normalsize
 \appendix
 \chapter{Zbiór explotów testujących system IPS}
 \end{document}
