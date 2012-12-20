@@ -91,15 +91,19 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Protokół internetowy (ang. \textit{Internet Protocol}), jest protokołem działającym w trzeciej warstwie sieciowej modelu OSI - warstwie sieciowej.
 			Odpowiedzialny jest za dostarczanie pakietów do hostów.
 			Hosty używające protokołu IP są adresowane przy użyciu adresów IP.
+
 			Aktualnie najpowszechniejszą wersją protokołu IP jest wersja IPv4, w której używany jest 32 bitowy adres.
 			Drugą wersją, która zaczyna wypierać IPv4 jest wersja IPv6, w której adresy mają długość 128 bitów.
+
+			Jeżeli wysyłane dane w pakiecie są większe niż MTU (\textit{MAximum Transfer Unit}), pakiet zostaje pofragmentowany, czyli podzielony na mniejsze porcje danych, tak aby ich rozmiar wraz z nagłówkiem były mniejsze niż najmniejsze MTU na trasie na której będzie przesyłany pakiet.
+			W przypadku fragmentaryzacji pakietu, zostają ustawione odpowiednie flagi w pakiecie - szczegóły poniżej.
 		\subsection{Nagłówek IP}
 		%http://www.freesoft.org/CIE/Course/Section3/7.htm
 			Każdy pakiet IP zostaje opakowany w ramkę IP.
 			Schemat takiej ramki został pokazany na rys. \ref{fig:ramka_ip}.
 			\begin{figure}[h]
 				\centering
-				\includegraphics[width=280px]{ip.png}
+				\includegraphics[width=400px]{ip.png}
 				\caption{Ramka pakietu IP}
 				%http://www.netguru.net/ntc/ntcgrap/Image53.gif
 				\label{fig:ramka_ip}
