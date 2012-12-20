@@ -24,3 +24,8 @@ iptables -F ZEW_SPOOF
 iptables -X ZEW_SPOOF
 iptables -F ZEW_SPOOF_DROPLOG
 iptables -X ZEW_SPOOF_DROPLOG
+
+iptables -F WIRUSY
+iptables -X WIRUSY
+iptables -F WIRUSY_DROPLOG
+iptables -X WIRUSY_DROPLOG
