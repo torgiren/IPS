@@ -229,12 +229,24 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\item[Padding]\hfill\\
 				Dopełnienie nagłówka zerami do rozmiaru będącego wielokrotnością słowa.
 			\end{description}
-
 		\subsection{Nawiązywanie połączenia}
 			Aby nawiązać połączenie przy użyciu protokołu TCP, należy przeprowadzić procedurę połączeniową, zwaną \textit{3 way handshake}, ponieważ, aby nawiązać połączenie, potrzeba wymienić trzy pakiety.\\
 			Początkowo, host inicjujący połączenie, wysyła pakiet z ustawioną flagą SYN, oraz specjalnie wygenerowaną losową wartością pola SEQ. Host odbierający pakiet SYN, odpowiada pakietem z ustawionymi flagami SYN oraz ACK, oraz specjalnie wygenerowaną wartością losową SEQ, natomiast wartość pola ACK zawiera wartość SEQ z pakietu SYN powiększoną o 1.
 			W odpowiedzi host inicjujący połączenie wysyła pakiet z flagą ACK oraz wartościami SEQ równej pierwszej wartości SEQ powiększonej o jeden, oraz ACK zawierająca wartość SEQ z pakietu SYN+ACK powiększoną o 1.\\
 			Po wymienieniu tych trzech pakietów, połączenie zostaje nawiązane.
+		\subsection{Kontrola transmisji}
+			Protokół TCP kontroluje ciągłość transmisji poprzez numery sekwencyjne.
+			Po nawiązaniu połączenia, każda ze stron połączenia ustaliła swoje numery sekwencyjne którymi będzie się posługiwać.
+			
+			Wysyłając pakiet o numerze sekwencyjnym 10, host odbierający wysyła pakiet ACK, z ustawionym numerem ACK równym numerowi sekwencyjnemu pakietu opowiadającemu temu potwierdzeniu.
+			Host wysyłający, po otrzymaniu odpowiedzi ACK z numerem sekwencyjnym pakietu który wysłał, uznaje ten pakiet za dostarczony.\\
+			W przypadku nie otrzymania odpowiedzi pewnym okresie czasu, uznaje się, że pakiet nie dotarł do adresata i następuje jego ponowne wysłanie.
+
+			Przy wysyłaniu kolejnych pakietów, numery sekwencyjne zwiększane są o długość poprzedniego pakietu.
+			Dla przykładu:\\
+			Wysyłając pakiet o numerze sekwencyjnym 1000, oraz długości 100, otrzymamy odpowiedź z numerem ack równym 1000.
+			Natomiast następny wysyłany pakiet będzie miał numer sekwencyjny 1100.
+		\subsection{Mechanizm okna}
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
