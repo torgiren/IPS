@@ -247,6 +247,46 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Wysyłając pakiet o numerze sekwencyjnym 1000, oraz długości 100, otrzymamy odpowiedź z numerem ack równym 1000.
 			Natomiast następny wysyłany pakiet będzie miał numer sekwencyjny 1100.
 		\subsection{Mechanizm okna}
+			Mechanizm przesuwnego okna pozwala na dopasowanie optymalnej prędkości przesyłu danych, przy zachowaniu ciągłości transmisji.
+
+			Gdyby host wysyłający, po wysłaniu pakietu oczekiwał na potwierdzenie jego odebrania przez host docelowy, a następnie wysyłał kolejną porcję danych, otrzymalibyśmy w pełni stabilne połączenie, jednak odstępy pomiędzy wysyłaniem kolejnych pakietów były znaczne, ponieważ równe by były czasowi dotarcia pakietu do hosta docelowego oraz czasowi powrotu potwierdzenia.
+
+			Aby tego uniknąć, host wysyłający mógłby wysyłać pakiety w serii, bez oczekiwania na potwierdzenia.
+			Jednak, jeżeli host odbierający charakteryzuje się mniejszą mocą obliczeniową niż host wysyłający, nie będzie w stanie obsłużyć wszystkich dochodzących pakietów.
+			Spowoduje to utratę tych pakietów i potrzeba ich retransmisji.
+			Prowadzić to będzie do wielokrotnego wysyłania tych samych danych, co z efekcie spowoduje spadek prędkości połączenia.
+		
+			Używając mechanizmu okna, host wysyła pakiety w serii, tylko w liczbie rozmiaru okna.
+			Następnie zaprzestaje wysyłania pakietów, do chwili otrzymania potwierdzenia otrzymania pierwszego pakietu.
+			Wtedy następuje przesunięcie okna o jedną pozycję i wysłanie kolejnego pakietu.\\
+			Host docelowy odpowiada na odbierane pakiety, pakietami z wartościami ack równymi wartościom seq.
+			W przypadku gdy host docelowy dostaje pakiet, którego parametr seq, jest większy niż wartość seq poprzedniego pakietu zsumowana z długością ostatniego pakietu, uznaje się, że w transmisji został zgubiony pakiet.
+			Wtedy, host docelowy odpowiada wartością ack ostatniego poprawnego pakietu.
+			Jeżeli zgubionym pakietem jest pierwszy pakiet w oknie nadawcy, okno nie zostaje przesunięte.
+			W przypadku gdy host docelowy dostaje pakiet, którego parametr seq, jest większy niż wartość seq poprzedniego pakietu zsumowana z długością ostatniego pakietu, uznaje się, że w transmisji został zgubiony pakiet.
+			Wtedy, host docelowy odpowiada wartością ack ostatniego poprawnego pakietu.
+			Jeżeli zgubionym pakietem jest pierwszy pakiet w oknie nadawcy, okno nie zostaje przesunięte.
+			Do hosta docelowego dostarczane są kolejne wysłane pakiety, na które odpowiedzią są pakiety z ack ostatniego poprawnego pakietu.
+			Gdy nastąpi retransmisja zgubionego pakietu i retransmitowany pakiet zostanie dostarczony do hosta docelowego, ten odpowiada pakietem o ack ostatniego pakietu w serii. Dla przykładu:\\
+			wielkość okna: 6
+			\begin{itemize}
+			\item Host A $\rightarrow$ Host B: seq 1000, len 100
+			\item Host A $\rightarrow$ Host B: seq 1100, len 100 (zagubiony)
+			\item Host A $\rightarrow$ Host B: seq 1200, len 200
+			\item Host A $\rightarrow$ Host B: seq 1400, len 100
+			\item Host A $\rightarrow$ Host B: seq 1500, len 200
+			\item Host A $\rightarrow$ Host B: seq 1700, len 100
+			\item Host A $\leftarrow$ Host B: ack 1000 (odpowiedź na seq 1000)
+			\item Host A $\rightarrow$ Host B: seq 1800, len 100
+			\item Host A $\leftarrow$ Host B: ack 1000 (odpowiedź na seq 1200)
+			\item Host A $\rightarrow$ Host B: seq 1100, len 100 (retransmisja)
+			\item Host A $\leftarrow$ Host B: ack 1000 (odpowiedź na seq 1400)
+			\item Host A $\leftarrow$ Host B: ack 1500 (odpowiedź na seq 1500)
+			\item Host A $\rightarrow$ Host B: seq 1900, len 200
+			\item Host A $\rightarrow$ Host B: seq 2100, len 100
+			\end{itemize}
+			Rozmiar okna jest ustalany dynamicznie w zależności o parametrów sieci i aktualnego obciążenia.
+			Algorytmy ustalania jego wielkości są poza zakresem tej pracy.
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
