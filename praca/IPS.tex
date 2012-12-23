@@ -234,6 +234,14 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Początkowo, host inicjujący połączenie, wysyła pakiet z ustawioną flagą SYN, oraz specjalnie wygenerowaną losową wartością pola SEQ. Host odbierający pakiet SYN, odpowiada pakietem z ustawionymi flagami SYN oraz ACK, oraz specjalnie wygenerowaną wartością losową SEQ, natomiast wartość pola ACK zawiera wartość SEQ z pakietu SYN powiększoną o 1.
 			W odpowiedzi host inicjujący połączenie wysyła pakiet z flagą ACK oraz wartościami SEQ równej pierwszej wartości SEQ powiększonej o jeden, oraz ACK zawierająca wartość SEQ z pakietu SYN+ACK powiększoną o 1.\\
 			Po wymienieniu tych trzech pakietów, połączenie zostaje nawiązane.
+			Powyższy schemat wymiany został przedstawiony na rys. \ref{fig:tcp_syn}.
+			\begin{figure}[h]
+				\centering
+					\includegraphics[width=400px]{tcp_3way.png}
+					\caption{Nawiązywanie połączenia TCP}
+					%http://www.bilgiagi.web.tr/wp-content/uploads/2011/03/tcp_3way.gif
+					\label{fig:tcp_syn}
+			\end{figure}
 		\subsection{Kontrola transmisji}
 			Protokół TCP kontroluje ciągłość transmisji poprzez numery sekwencyjne.
 			Po nawiązaniu połączenia, każda ze stron połączenia ustaliła swoje numery sekwencyjne którymi będzie się posługiwać.
@@ -256,7 +264,7 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Spowoduje to utratę tych pakietów i potrzeba ich retransmisji.
 			Prowadzić to będzie do wielokrotnego wysyłania tych samych danych, co z efekcie spowoduje spadek prędkości połączenia.
 		
-			Używając mechanizmu okna, host wysyła pakiety w serii, tylko w liczbie rozmiaru okna.
+			Używając mechanizmu okna, host wysyła pakiety w serii, tylko w rozmiarze nieprzekraczającym rozmiaru okna.
 			Następnie zaprzestaje wysyłania pakietów, do chwili otrzymania potwierdzenia otrzymania pierwszego pakietu.
 			Wtedy następuje przesunięcie okna o jedną pozycję i wysłanie kolejnego pakietu.\\
 			Host docelowy odpowiada na odbierane pakiety, pakietami z wartościami ack równymi wartościom seq.
@@ -287,6 +295,8 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			\end{itemize}
 			Rozmiar okna jest ustalany dynamicznie w zależności o parametrów sieci i aktualnego obciążenia.
 			Algorytmy ustalania jego wielkości są poza zakresem tej pracy.
+		\subsection{Kończenie połączenia}
+			
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
