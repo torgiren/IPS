@@ -4,15 +4,15 @@ echo "Clean..."
 iptables -N IPS
 
 echo "SSH Brute Force"
-#./firewall_brute.sh
+./firewall_brute.sh
 echo "SYN Flood"
-#./firewall_syn_flood.sh
+./firewall_syn_flood.sh
 echo "Timestamp Request"
-#./firewall_timestamp_request.sh
+./firewall_timestamp_request.sh
 echo "ACK Scan"
-#./firewall_ack_scan.sh
+./firewall_ack_scan.sh
 echo "Spoofing"
-#./firewall_spoofing_zew.sh
+./firewall_spoofing_zew.sh
 echo "Wirusy"
 ./firewall_wirusy.sh
 
