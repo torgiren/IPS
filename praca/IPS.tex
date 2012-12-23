@@ -296,7 +296,11 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Rozmiar okna jest ustalany dynamicznie w zależności o parametrów sieci i aktualnego obciążenia.
 			Algorytmy ustalania jego wielkości są poza zakresem tej pracy.
 		\subsection{Kończenie połączenia}
-			
+			Aby zakończyć połączenie, host wysyła pakiet z ustawioną flagą FIN oraz numerem sekwencyjnym równym SEQ.
+			Host docelowy odpowiada pakietem ACK z wartością ack równą SEQ+1 otrzymanego pakietu.
+			Następnie również wysyła pakiet FIN do hosta kończącego połączenie.
+			Host kończący odpowiada pakietem ACK w wartością ack równą SEQ+1 pakietu FIN.
+			Po wysłaniu ACK, host kończący uznaje połączenie za zakończone, natomiast host docelowy uznaje połączenie za zakończone po otrzymaniu ACK.
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
