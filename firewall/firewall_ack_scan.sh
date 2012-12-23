@@ -1,7 +1,7 @@
 iptables -N ACK_SCAN_DROPLOG
 iptables -A ACK_SCAN_DROPLOG
 iptables -A ACK_SCAN_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name ack_scan_log \
-	--hashlimit-burst 1 -j LOG --log-prefix "ACK_SCAN"
+	--hashlimit-burst 1 -j LOG --log-prefix "IPS: ACK_SCAN "
 iptables -A ACK_SCAN_DROPLOG -j REJECT
 
 iptables -N ACK_SCAN
