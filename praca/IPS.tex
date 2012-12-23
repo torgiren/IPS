@@ -301,6 +301,17 @@ Na kolejnych dwóch stronach proszę dołączyć kolejno recenzje pracy popełni
 			Następnie również wysyła pakiet FIN do hosta kończącego połączenie.
 			Host kończący odpowiada pakietem ACK w wartością ack równą SEQ+1 pakietu FIN.
 			Po wysłaniu ACK, host kończący uznaje połączenie za zakończone, natomiast host docelowy uznaje połączenie za zakończone po otrzymaniu ACK.
+		\subsection{Nieoczekiwane zachowania}
+			Protokół TCP reaguje na nieoczekiwane zachowania wysyłaniem pakietu z ustawioną flagą RST.
+			Takimi nieoczekiwanymi sytuacjami mogą być:
+			\begin{itemize}
+			\item Wysłanie pakietu SYN na port na którym nie słucha żadna usługa.\\
+				Jeżeli TCP otrzymuje pakiet SYN na porcie na którym nie słucha żadna usługa, uznaje, że taki pakiet nie jest oczekiwanym pakietem i odpowiada hostowi wysyłającemu pakietem z ustawionymi flagami RST i ACK.
+				Jest to informacja że na tym porcie nie są oczekiwane połączenia.
+			\item Wysłanie pakietu ACK.\\
+				Jeżeli host otrzymuje nieoczekiwany pakiet ACK, wygenerowana zostaje informacja do hosta nadającego o zaprzestanie transmisji.
+				Informacja taka jest przekazywana poprzez pakiet z ustawioną flagą RST.
+			\end{itemize}
 \chapter{Analiza ruchu sieciowego}
 	\section{Używane narzędzie}
 		Jako systemu analizującego ruch sieciowy wykorzystam pakiet Netfilter konfigurowany za pomocą iptables.
