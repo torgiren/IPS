@@ -20,12 +20,12 @@ for line in lines:
 		logczas="%d-%02d-%02d %s"%(t.year,t.month,t.day,data[2])
 		data=data[7:]
 	#	data=line[line.find('IPS:')+5:].split()
-		typ=None
-		src=None
-		dst=None
-		sport=None
-		dport=None
-		proto=None
+		typ="Brak"
+		src="Brak"
+		dst="Brak"
+		sport="Brak"
+		dport="Brak"
+		proto="Brak"
 		typ=data[0]
 		for d in data:
 			if d.startswith("SRC="):
