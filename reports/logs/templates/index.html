@@ -2,7 +2,31 @@
 	<head>
 		<title>Log viewer</title>
 	</head>
+	<style>
+		table {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		td, th{
+			border: 1px solid black;
+			padding-left:5px;
+			padding-right:5px;
+		}
+	</style>
 	<body>
 		<H1>Log viewer</H1>
+		<table>
+			<tr><th>Lp</th><th>Data</th><th>Typ</th><th>Źródło</th><th>Cel</th><th>Protokół</th><th>Log</th></tr>
+		{% for item in items %}
+		<tr><td>{{ forloop.counter }}</td>
+			<td>{{ item.czas|date:'o-m-d H:i:s'}}</td>
+			<td>{{ item.typ }}</td>
+			<td>{{ item.src }}:{{ item.sport }}</td>
+			<td>{{ item.dst }}:{{ item.dport }}</td>
+			<td>{{ item.proto }}</td>
+			<td>Show</td>
+		</tr>
+		{% endfor %}
+		</table>
 	</body>
 </html>
