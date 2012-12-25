@@ -1,0 +1,30 @@
+\chapter{Raportowanie}
+	\section{Logowanie do pliku}
+		Logowanie pakietów przy użyciu opcji \textit{-j LOG}, w domyślnej konfiguracji zapisuje pakiety do pliku \textit{/var/log/messages}.
+		W tym pliku zapisywane są wszystkie zdarzenia logowane na komputerze.
+		Mnogość logowanych zdarzeń może utrudniać filtrowanie interesujących nas informacji z systemu IPS.
+		Dlatego też, należy przekierować zapisywanie zapisów do osobnego pliku.
+		W systemie Ubuntu 10.4, domyślnym systemem logowania jest \textit{rsyslog}, dlatego przedstawiona zostanie konfiguracja dla tego systemu.
+		
+		Cechą wspólną wszystkich zapisów tworzonych przez opisywany system IPS, jest występowanie frazy "IPS:".
+		Wszystkie wpisy zawierające powyższą frazę traktujemy jako wpis systemu i przekierowujemy do osobnego pliku.
+		Aby to osiągnąć, umieszczamy plik konfiguracyjny:
+		\lstinputlisting[caption=/etc/rsyslog.d/ips.conf,basicstyle=\footnotesize,numbers=left]{../reports/conf/etc/rsyslog.d/ips.conf}
+	\section{Logowanie do bazy danych}
+		Ponieważ operowanie na plikach tekstowych jest zarówno niewygodne jak i mniej optymalne niż operowanie na rekordach bazy danych, zdarzenia będą zapisywane do bazy danych.
+
+		Zapisywania będziemy dokonywać, uruchamiając co minutę skrypt napisany w języku Python.
+		Skrypt ten będzie filtrować plik \textit{/var/log/ips.log}, zawierający zdarzenia z systemu IPS, tak, aby uzyskać tylko zdarzenia zarejestrowane w poprzedniej minucie.
+		Następnie przeprowadzi analizę wpisów zdarzeń i dokona wpisu do bazy danych.
+
+		Każdy rekord w bazie danych, reprezentujący zdarzenie, będzie zawierał podstawowe parametry zdarzenia, tj:
+		\begin{itemize}
+			\item czas w którym nastąpiło wykrycie zdarzenia
+			\item typ ataku
+			\item adres źródłowy ataku
+			\item adres docelowy ataku
+			\item port źródłowy
+			\item port docelowy
+			\item użyty protokół
+			\item dokładny wpis wygenerowany przez iptables
+		\end{itemize}
