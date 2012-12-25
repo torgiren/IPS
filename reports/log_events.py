@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import os
+import os,sys
+os.chdir(os.path.dirname(sys.argv[0]))
 os.environ['DJANGO_SETTINGS_MODULE']='settings'
 from django.core.management import setup_environ
 import settings
@@ -38,3 +39,4 @@ for line in lines:
 			elif d.startswith("PROTO="):
 				proto=d[6:]
 		Event(czas=logczas,typ=typ,src=src,dst=dst,sport=sport,dport=dport,proto=proto,log=line).save()
+		#print line
