@@ -12,6 +12,7 @@
 \usepackage{moreverb}
 \usepackage{nameref}
 \usepackage{listings}
+\usepackage{url}
 \usepackage[font=footnotesize,labelfont=bf]{caption}
 \geometry{hmargin={2cm, 2cm}, height=10.0in}
 \assignpagestyle{\chapter}{empty}
@@ -21,6 +22,9 @@
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 \begin{document}
+\nocite{*}
+%\bibliographystyle{plain}
+\bibliographystyle{amsplain}
 \include{title}
 \include{wstep}
 \include{o_ips}
@@ -31,4 +35,6 @@
 \include{raportowanie}
 \include{zakonczenie}
 %\include{exploity}
+\bibliography{IPS}
+\listoffigures 
 \end{document}
