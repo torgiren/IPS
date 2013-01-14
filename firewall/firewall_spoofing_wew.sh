@@ -6,7 +6,7 @@ ipset -A clients 192.168.242.111%00:26:b6:66:d5:18
 
 iptables -N WEW_SPOOF_DROPLOG
 iptables -A WEW_SPOOF_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name wew_spoof_log \
-	--hashlimit-burst 1 -j LOG --log-prefix "WEW_SPOOF"
+	--hashlimit-burst 1 -j LOG --log-prefix "IPS: WEW_SPOOF "
 iptables -A WEW_SPOOF_DROPLOG -j REJECT
 
 

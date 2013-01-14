@@ -1,7 +1,7 @@
 iptables -N SYN_FLOOD_DROPLOG
 iptables -A SYN_FLOOD_DROPLOG
 iptables -A SYN_FLOOD_DROPLOG -m hashlimit --hashlimit-upto 1/minute --hashlimit-name syn_flood_log \
-	--hashlimit-burst 1 -j LOG --log-prefix "SYN_FLOOD"
+	--hashlimit-burst 1 -j LOG --log-prefix "IPS: SYN_FLOOD "
 iptables -A SYN_FLOOD_DROPLOG -j REJECT
 
 iptables -N SYN_FLOOD
