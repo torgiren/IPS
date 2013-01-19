@@ -1,7 +1,6 @@
 \chapter{Wykrywanie zagrożeń}
 	\label{sec:wykrywanie}
 	\section{SSH BruteForce}
-		\subsection{Opis}
 			Atak polega na ciągłej próbie połączenia się z~atakowanym komputerem za pomocą protokołu SSH, używając za każdym innego hasła z~listy haseł. Jeżeli hasło użytkownika, znajduje się na liście haseł atakującego, istnieje duże prawdopodobieństwo, że atakującemu uda się przy którejś próbie połączyć z~atakowanym komputerem.
 		\subsection{Obrona}
 			Jako obronę na ten typ ataku, zastosuję ograniczenie liczby połączeń z~usługą SSH do 5 na minutę.
@@ -12,7 +11,6 @@
 			\normalsize
 	\section{SYN Flood}
 		\label{sec:syn_flood}
-		\subsection{Opis}
 			Atak ten jest jednym z~ataków DoS (Denial of Service) i~polega wysyłaniu dużej ilości pakietów SYN do atakowanego hosta w~celu nieumożliwienia pozostałym użytkownikom sieci skorzystanie z~atakowanej usługi.
 			
 			Atak ten wykorzystuje specyfikę protokołu TCP i~sposobu w~jaki protokół ten nawiązuje połączenie. Aby nawiązać połączenie komputer łączący się wysyła pakiet SYN do serwera.\\
@@ -46,7 +44,6 @@
 			\verbatimtabinput{./../firewall/firewall_syn_flood.sh}
 			\normalsize
 	\section{ICMP Flood}
-		\subsection{Opis}
 			ICMP Flood to najczęstszy z~ataków mających na celu całkowite odcięcie dostępu do atakowanego hosta.
 			Polega on na wysyłaniu bardzo dużej ilości danych. Ilość tych danych musi być większa niż przepustowość łącza atakowanego hosta.
 			Następuje wtedy nasycenie pasma, i~żądania od zwykłych klientów nie są dostarczane do hosta.
@@ -65,7 +62,6 @@
 			Wynika to z~faktu, że gdy host jest atakowany dużą ilością pakietów, które wysycają łącze, netfilter może odrzucać pakiety agresora dopiero gdy docierają one do firewalla,
 			czyli gdy już wysycą łącze. Nie ma możliwości przy użyciu narzędzia netfilter na zapobieganiu dostarczania pakietów do naszego komputera.
 	\section{ICMP Timestamp Request}
-		\subsection{Opis}
 			Żądanie ICMP Timestamp Request o~numerze 13, jest badaniem podania czasu serwera.
 			Nie jest ono samo w~sobie atakiem, ale poznanie dokładnego czasu atakowanego hosta, może ułatwić złamanie algorytmów bazujących na generatorach liczb pseudolosowych opartych o~aktualny czas.
 			
@@ -78,7 +74,6 @@
 			\normalsize
 	\section{Skanowanie portów pakietami SYN}
 		\label{sec:syn_scan}
-		\subsection{Opis}
 			Skanowanie portów pozwala na zbadanie atakowanego hosta pod kątem udostępnianych przez niego usług. Znając działające usługi na hoście, można dobierać odpowiednie metody.		
 			
 			Wysyłając pakiet SYN na skanowany port, host może zareagować na 4 sposoby:
@@ -111,7 +106,6 @@
 			\label{sec:syn_scan_impl}
 			Patrz: \ref{sec:syn_flood_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_flood}/\nameref{sec:syn_flood_impl} na stronie \pageref{sec:syn_flood_impl}.
 	\section{Skanowanie portów funkcjami systemowymi}
-		\subsection{Opis}
 			Skanowanie portów funkcjami systemowymi, wykorzystuje oferowaną przez system operacyjny obsługę połączeń sieciowych.
 			Nie dają one możliwości preparowania pakietów, dlatego w~przypadku natrafienia na otwarty port przeprowadzana jest kompletna procedura \textit{3-way\dywiz handshake} jak również nie ma możliwości zmiany adresów źródłowych ani innych wartości w~ramkach pakietu.
 			Jednak, jest to jedyna metoda która może być wykonana na komputerze bez dostępu do konta administratora.
@@ -120,7 +114,8 @@
 		\subsection{Implementacja}
 			Patrz: \ref{sec:syn_scan_impl}: \nameref{sec:wykrywanie}/\nameref{sec:syn_scan}/\nameref{sec:syn_scan_impl} na stronie \pageref{sec:syn_scan_impl}.
 	\section{Skanowanie portów pakietami ACK}
-		\subsection{Opis}
+		
+
 			Skanowanie portów pakietami ACK wykorzystuje specyfikację protokołu TCP, który na nieoczekiwany pakiet z~flagą ACK odpowiada pakietem RST.
 
 			Wysyłając spreparowany pakiet TCP z~ustawioną flagą ACK, sprawiamy że system operacyjny na atakowanym hoście, nie jest w~stanie go dopasować do żadnego istniejącego połączenia i~odsyła pakiet z~ustawioną flagą RST do atakującego hosta informując w~ten sposób o~nieprawidłowościach.\\
@@ -136,7 +131,6 @@
 			\verbatimtabinput{./../firewall/firewall_ack_scan.sh}
 			\normalsize
 	\section{Spoofing z~sieci wewnętrznej}
-		\subsection{Opis}
 			Ataki wykorzystujące spoofing polegają na podszywaniu się pod innego użytkownika sieci.
 			Mają one na celu zafałszowanie informacji o~atakującym.\\
 			Wykonując atak SYN FLOOD (patrz: \ref{sec:syn_flood}), używaliśmy spoofingu w~celu opóźnienia usuwania wpisów z~tablicy.
@@ -190,7 +184,6 @@
 			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
 			\normalsize
 	\section{Spoofing z zewnątrz}
-		\subsection{Opis}
 			Ataki tego typu polegają na podszywaniu się pod hosty z sieci wewnętrznej przy połączeniach z sieci zewnętrznej.
 			Może to prowadzić do prowadzić do wykonania ataku DDoS przy użyciu adresu broadcast. 
 			Wysyłając pakiety z ustawionym adresem źródłowym na IP atakowanego hosta, IP docelowym na broadcast oraz docelowym adresem MAC na adres serwera, zostaną one przekazane przez serwer na adres broadcast, po czym każdy host w sieci odpowie na taki pakiet do hosta wskazanego przez adres źródłowy.
@@ -202,14 +195,16 @@
 			\verbatimtabinput{./../firewall/firewall_spoofing_zew.sh}
 			Zakładamy że interface eth0 jest naszym interfejsem do sieci wewnętrznej a~eth1 do sieci zewnętrznej
 			\normalsize
-	\section{Wirusy}
-		\subsection{Opis}
+	\section{Złośliwe oprogramowanie}
 			Obecność wirusów w sieci może prowadzić do infekowania kolejnych komputerów, a w przypadku utworzenia tzw. \textit{botnet}-u, przeprowadzenie ataku.
 			Aktywność większości wirusów charakteryzuje się wysyłaniem dużej ilości poczty elektronicznej.
 		\subsection{Obrona}
 			Należy wychwytywać i blokować zbyt duży ruch poczty elektronicznej.
 			Jednakże, należy tutaj uważać, na tzw. \textit{false-positive} dopasowania, czyli uznanie normalnego ruchu pocztowego jako ruchu spamowego.
 			Sytuacja taka może nastąpić podczas wysyłania aplikacji do pracy, gdzie następuje wysyłanie dużej ilości wiadomości do pracodawców.
+
+			Trzeba jednak pamiętać, że filtrowanie pakietów pocztowych nie zapewnia całkowitego zabezpieczenia.
+			Należy jeszcze stosować dodatkowe filtry działające w warstwach wyższych.
 		\subsection{Implementacja}
 			\footnotesize
 			\verbatimtabinput{./../firewall/firewall_wirusy.sh}

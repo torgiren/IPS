@@ -1,8 +1,18 @@
 \chapter*{Wstęp}
 	\addcontentsline{toc}{chapter}{Wstęp}
 	W dobie coraz większego przenikania internetu do życia codziennego, przestępstwa komputerowe stają się coraz bardziej powszechne.
-	Wykradane informacje stanowią taką samą wartość, jak fizycznie ukradzione przedmioty.
+	Wykradane informacje stanowią taką samą wartość, a nawet większą, jak fizycznie ukradzione przedmioty.
 	Ponadto odcięcie dostępu do portalu powoduje znaczne straty dla firmy oraz możliwość przejęcia części rynku przez konkurencję.
 	Dlatego tak ważnym tematem jest obrona przez atakami sieciowymi.\\
 	W swojej pracy omówię podstawowe ataki odmowy dostępu oraz skanowania hosta, które może być pierwszym krokiem podczas próby ataku, a następnie postaram się przedstawić sposoby obrony przed nimi.
 	Postaram się przedstawić metody ataku, możliwe konsekwencje z nick wynikające oraz sposoby obrony przed nimi.
+
+	Jako system operacyjny dla opracowywanego systemu IPS może posłużyć dowolna dystrybucja GNU/Linux.
+	Systemy te dają dużą możliwość ingerencji i filtrowania ruchu sieciowego przy użyciu narzędzi Netfilter i Iptables.
+	Używane narzędzie zostaną dokładniej opisane w rozdziałach \ref{chap:analiza} oraz \ref{chap:iptables}.
+
+	Rozdział \ref{sec:wykrywanie} poświęcony zostanie poświęcony atakom wykrywanym przez projektowany system IPS.
+	Przedstawiony zostanie opis każdego ataku oraz możliwe konsekwencje każdego ataku.
+	Następnie opisana metodologia obrony oraz przedstawienie konkretnego rozwiązania implementacyjnego.
+
+	Natomiast ostatni rozdział zostanie poświęcony metodzie zbierania informacji oraz zapisywania wykrytych zdarzeń do bazy danych.
