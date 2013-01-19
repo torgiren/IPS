@@ -28,3 +28,11 @@
 			\item użyty protokół
 			\item dokładny wpis wygenerowany przez iptables
 		\end{itemize}
+
+		Skrypt realizujący parsowanie pliku dziennika wygląda następująco:
+		\footnotesize
+		\lstinputlisting[caption=log\_events.py,tabsize=2]{./../reports/log_events.py}
+		\normalsize
+
+		Aby ograniczyć zbytni przyrost objętości plików dziennika, który może powodować zapełnienie przestrzeni dyskowej oraz spowolnienie analizy pliku, zastosowano ograniczenie zapisywanie zdarzeń do jednego na minutę.
+		Daje to dobre wyważenie pomiędzy ograniczeniem wielkości danych a zachowaniem wszystkich ważnych informacji.

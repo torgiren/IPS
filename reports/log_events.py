@@ -10,7 +10,6 @@ setup_environ(settings)
 import datetime
 
 t=datetime.datetime.now()-datetime.timedelta(minutes=1)
-#t=datetime.datetime.now()-datetime.timedelta(minutes=1)
 czas="%d %02d:%02d:"%(t.day,t.hour,t.minute)
 plik=open("/var/log/ips.log")
 lines=plik.readlines()
@@ -19,7 +18,6 @@ for line in lines:
 		data=line.split()
 		logczas="%d-%02d-%02d %s"%(t.year,t.month,t.day,data[2])
 		data=data[7:]
-	#	data=line[line.find('IPS:')+5:].split()
 		typ="Brak"
 		src="Brak"
 		dst="Brak"
@@ -38,5 +36,5 @@ for line in lines:
 				sport=d[4:]
 			elif d.startswith("PROTO="):
 				proto=d[6:]
-		Event(czas=logczas,typ=typ,src=src,dst=dst,sport=sport,dport=dport,proto=proto,log=line).save()
-		#print line
+		Event(czas=logczas,typ=typ,src=src,dst=dst,sport=sport,\
+			dport=dport,proto=proto,log=line).save()
