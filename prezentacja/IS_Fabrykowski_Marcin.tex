@@ -1,0 +1,68 @@
+\documentclass{beamer}
+%\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usetheme{AGH}
+
+\title{System IPS oparty o iptables}
+\author{Marcin Fabrykowski}
+\date{\today}
+
+\begin{document}
+
+\titleframe[pl]
+
+\begin{frame}
+\frametitle{System IPS}
+    \begin{block}{IPS}<1->
+        Intrusion Prevention System.\\
+    \end{block}
+	\begin{block}{Schemat działania}<2->
+		\begin{enumerate}
+			\item Analiza ruchu sieciowego
+			\item Wykrycie podejrzanych zachować
+			\item Reakcja na wykryte zagrożenia
+			\item Poinformowanie o próbie ataku
+			\item Zapisanie danych o ataku
+			\item Udostępnienie historii ataków i podjętych działań
+		\end{enumerate}
+	\end{block}
+\end{frame}
+\begin{frame}
+\frametitle{Analiza danych}
+	\begin{block}{Analizowane dane}<1->
+	Pakiety TCP/IP
+	\end{block}
+	\begin{block}{Używane narzędzie}<2->
+	Netfilter/iptables
+	\end{block}
+\end{frame}
+\begin{frame}
+\frametitle{Rozpoznawane ataki}
+	\begin{itemize}
+		\item SSH BruteForce
+		\item SYN Flood
+		\item ICMP Flood
+		\item ICMP Timestamp Request
+		\item Skanowanie pakietami SYN
+		\item Skanowanie funkcjami systemowymi
+		\item Skanowanie pakietami ACK
+		\item Spoofing z zewnątrz
+		\item Spoofing z wewnątrz
+		\item Złośliwe oprogramowanie
+	\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Raportowanie}
+	\begin{block}{Schemat raportowania}
+		\begin{enumerate}
+			\item zapis pakietów do pliku
+			\item zapis pakietów do bazy danych
+			\item prezentacja pakietów administratorowi
+		\end{enumerate}
+	\end{block}
+\end{frame}
+
+\end{document}
